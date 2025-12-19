@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct getinloser2App: App {
+    @StateObject private var cloudKitManager = CloudKitManager.shared
+    @StateObject private var locationManager = LocationManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LaunchScreenView()
+                .environmentObject(cloudKitManager)
+                .environmentObject(locationManager)
+                .preferredColorScheme(.dark)
         }
     }
 }
