@@ -1,10 +1,30 @@
 import SwiftUI
 
 struct LaunchScreenView: View {
+    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var notificationManager: NotificationManager
     @State private var isAnimating = false
     @State private var rotationAngle: Double = 0
+    @State private var showHomeView = false
     
     var body: some View {
+        Group {
+            if showHomeView || !cloudKitManager.isLoading {
+                HomeView()
+            } else {
+                launchContent
+            }
+        }
+        .onChange(of: cloudKitManager.isLoading) { oldValue, newValue in
+            if !newValue {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    showHomeView = true
+                }
+            }
+        }
+    }
+    
+    private var launchContent: some View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
@@ -51,4 +71,6 @@ struct LaunchScreenView: View {
 
 #Preview {
     LaunchScreenView()
+        .environmentObject(CloudKitManager.shared)
+        .environmentObject(NotificationManager.shared)
 }

@@ -12,6 +12,37 @@ struct Trip: Identifiable, Codable, Hashable {
     var ownerID: String
     var memberIDs: [String]
     var recordName: String?
+    var inviteCode: String // Unique code for inviting others
+    
+    // MARK: - Hashable & Equatable
+    
+    static func == (lhs: Trip, rhs: Trip) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.name == rhs.name &&
+        lhs.location == rhs.location &&
+        lhs.startDate == rhs.startDate &&
+        lhs.endDate == rhs.endDate &&
+        lhs.ownerID == rhs.ownerID &&
+        lhs.memberIDs == rhs.memberIDs &&
+        lhs.recordName == rhs.recordName &&
+        lhs.inviteCode == rhs.inviteCode &&
+        lhs.coordinate?.latitude == rhs.coordinate?.latitude &&
+        lhs.coordinate?.longitude == rhs.coordinate?.longitude
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+        hasher.combine(location)
+        hasher.combine(startDate)
+        hasher.combine(endDate)
+        hasher.combine(ownerID)
+        hasher.combine(memberIDs)
+        hasher.combine(recordName)
+        hasher.combine(inviteCode)
+        hasher.combine(coordinate?.latitude)
+        hasher.combine(coordinate?.longitude)
+    }
     
     init(id: String = UUID().uuidString,
          name: String,
@@ -21,7 +52,8 @@ struct Trip: Identifiable, Codable, Hashable {
          endDate: Date,
          ownerID: String,
          memberIDs: [String] = [],
-         recordName: String? = nil) {
+         recordName: String? = nil,
+         inviteCode: String? = nil) {
         self.id = id
         self.name = name
         self.location = location
@@ -31,6 +63,13 @@ struct Trip: Identifiable, Codable, Hashable {
         self.ownerID = ownerID
         self.memberIDs = memberIDs
         self.recordName = recordName
+        self.inviteCode = inviteCode ?? Trip.generateInviteCode()
+    }
+    
+    // Generate a 6-character alphanumeric invite code
+    static func generateInviteCode() -> String {
+        let characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789" // Excludes confusing characters like 0, O, I, 1
+        return String((0..<6).map { _ in characters.randomElement()! })
     }
     
     // CloudKit conversion
@@ -51,6 +90,7 @@ struct Trip: Identifiable, Codable, Hashable {
         self.ownerID = ownerID
         self.memberIDs = record["memberIDs"] as? [String] ?? []
         self.recordName = record.recordID.recordName
+        self.inviteCode = record["inviteCode"] as? String ?? Trip.generateInviteCode()
         
         if let locationAsset = record["coordinate"] as? CLLocation {
             self.coordinate = locationAsset.coordinate
@@ -67,6 +107,7 @@ struct Trip: Identifiable, Codable, Hashable {
         record["endDate"] = endDate
         record["ownerID"] = ownerID
         record["memberIDs"] = memberIDs
+        record["inviteCode"] = inviteCode
         
         if let coordinate = coordinate {
             record["coordinate"] = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
@@ -77,7 +118,7 @@ struct Trip: Identifiable, Codable, Hashable {
     
     // Codable for coordinate
     enum CodingKeys: String, CodingKey {
-        case id, name, location, startDate, endDate, ownerID, memberIDs, recordName
+        case id, name, location, startDate, endDate, ownerID, memberIDs, recordName, inviteCode
         case latitude, longitude
     }
     
@@ -91,6 +132,7 @@ struct Trip: Identifiable, Codable, Hashable {
         try container.encode(ownerID, forKey: .ownerID)
         try container.encode(memberIDs, forKey: .memberIDs)
         try container.encodeIfPresent(recordName, forKey: .recordName)
+        try container.encode(inviteCode, forKey: .inviteCode)
         try container.encodeIfPresent(coordinate?.latitude, forKey: .latitude)
         try container.encodeIfPresent(coordinate?.longitude, forKey: .longitude)
     }
@@ -105,6 +147,7 @@ struct Trip: Identifiable, Codable, Hashable {
         ownerID = try container.decode(String.self, forKey: .ownerID)
         memberIDs = try container.decode([String].self, forKey: .memberIDs)
         recordName = try container.decodeIfPresent(String.self, forKey: .recordName)
+        inviteCode = try container.decodeIfPresent(String.self, forKey: .inviteCode) ?? Trip.generateInviteCode()
         
         if let lat = try container.decodeIfPresent(Double.self, forKey: .latitude),
            let lon = try container.decodeIfPresent(Double.self, forKey: .longitude) {

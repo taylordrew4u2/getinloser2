@@ -14,6 +14,36 @@ struct ItineraryEvent: Identifiable, Codable, Hashable {
     var createdBy: String
     var recordName: String?
     
+    // MARK: - Hashable & Equatable
+    
+    static func == (lhs: ItineraryEvent, rhs: ItineraryEvent) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.tripID == rhs.tripID &&
+        lhs.name == rhs.name &&
+        lhs.date == rhs.date &&
+        lhs.time == rhs.time &&
+        lhs.location == rhs.location &&
+        lhs.notes == rhs.notes &&
+        lhs.createdBy == rhs.createdBy &&
+        lhs.recordName == rhs.recordName &&
+        lhs.coordinate?.latitude == rhs.coordinate?.latitude &&
+        lhs.coordinate?.longitude == rhs.coordinate?.longitude
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(tripID)
+        hasher.combine(name)
+        hasher.combine(date)
+        hasher.combine(time)
+        hasher.combine(location)
+        hasher.combine(notes)
+        hasher.combine(createdBy)
+        hasher.combine(recordName)
+        hasher.combine(coordinate?.latitude)
+        hasher.combine(coordinate?.longitude)
+    }
+    
     init(id: String = UUID().uuidString,
          tripID: String,
          name: String,
@@ -37,12 +67,21 @@ struct ItineraryEvent: Identifiable, Codable, Hashable {
     }
     
     init?(record: CKRecord) {
-        guard let tripID = record["tripID"] as? String,
-              let name = record["name"] as? String,
+        guard let name = record["name"] as? String,
               let date = record["date"] as? Date,
               let time = record["time"] as? Date,
               let location = record["location"] as? String,
               let createdBy = record["createdBy"] as? String else {
+            return nil
+        }
+        
+        // Handle tripID as either a Reference or String
+        let tripID: String
+        if let reference = record["tripID"] as? CKRecord.Reference {
+            tripID = reference.recordID.recordName
+        } else if let stringID = record["tripID"] as? String {
+            tripID = stringID
+        } else {
             return nil
         }
         
@@ -65,7 +104,11 @@ struct ItineraryEvent: Identifiable, Codable, Hashable {
         let recordID = recordName.map { CKRecord.ID(recordName: $0) } ?? CKRecord.ID(recordName: id)
         let record = CKRecord(recordType: "ItineraryEvent", recordID: recordID)
         
-        record["tripID"] = tripID
+        // Create a reference to the Trip record
+        let tripRecordID = CKRecord.ID(recordName: tripID)
+        let tripReference = CKRecord.Reference(recordID: tripRecordID, action: .deleteSelf)
+        record["tripID"] = tripReference
+        
         record["name"] = name
         record["date"] = date
         record["time"] = time

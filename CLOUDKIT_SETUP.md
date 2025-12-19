@@ -197,6 +197,52 @@ The app automatically creates these CloudKit record types on first use:
 
 ---
 
+## ⚠️ Important: Manual CloudKit Schema Setup
+
+**If you see errors like**:
+- `"Type is not marked indexable: Trip"`
+- `"Field 'tripID' has a value type of REFERENCE and cannot be queried using filter value type STRING"`
+
+**You need to manually configure the schema in CloudKit Dashboard:**
+
+### Step 1: Access CloudKit Dashboard
+1. Go to: https://icloud.developer.apple.com/
+2. Sign in with your Apple Developer account
+3. Select your container: `ICloud.TRAVEL.getinloser2`
+
+### Step 2: Add Indexes to Trip Record Type
+1. Click on **"Schema"** in the left sidebar
+2. Click on **"Record Types"**
+3. Select the **"Trip"** record type
+4. Go to **"Indexes"** tab
+5. Add these queryable indexes:
+   - `memberIDs` (QUERYABLE) - **Required for fetching user's trips**
+   - `inviteCode` (QUERYABLE) - Required for join by invite code
+   - `startDate` (QUERYABLE, SORTABLE) - For sorting trips
+
+### Step 3: Fix Reference Fields (tripID)
+The `tripID` field in these record types must be a **REFERENCE** type, not STRING:
+
+For each of these record types: **ItineraryEvent, TodoItem, TicketDocument, TripNote**
+1. Select the record type in Schema → Record Types
+2. Find the `tripID` field
+3. Ensure it's set to type **REFERENCE** pointing to Trip record
+4. Mark it as **QUERYABLE**
+
+### Step 4: Deploy Schema to Development
+1. After making changes, click **"Deploy Schema Changes..."**
+2. Select **"Development"** environment
+3. Click **"Deploy"**
+
+### Step 5: Clear Existing Data (if corrupted)
+If you had created records with wrong field types:
+1. Go to **"Data"** → **"Records"**
+2. Select **"Public Database"**
+3. Delete any corrupted records
+4. Re-run the app to create fresh records with correct schema
+
+---
+
 ## Testing CloudKit Functionality
 
 ### 1. Build and Run on Device

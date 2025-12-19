@@ -5,11 +5,16 @@ struct TodoTabView: View {
     
     let trip: Trip
     
-    @State private var todos: [TodoItem] = []
     @State private var members: [TripMember] = []
     @State private var isLoading = true
     @State private var showingAddTodo = false
-    @State private var newTodoTitle = ""
+    
+    // Use cached data for live updates
+    private var todos: [TodoItem] {
+        (cloudKitManager.todosCache[trip.id] ?? []).sorted {
+            !$0.isFullyCompleted(memberIDs: trip.memberIDs) && $1.isFullyCompleted(memberIDs: trip.memberIDs)
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -50,10 +55,17 @@ struct TodoTabView: View {
         .task {
             await loadData()
         }
+        .refreshable {
+            await loadData()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            Task {
+                await loadData()
+            }
+        }
         .sheet(isPresented: $showingAddTodo) {
-            AddTodoView(trip: trip) { newTodo in
-                todos.append(newTodo)
-                todos.sort { !$0.isFullyCompleted(memberIDs: trip.memberIDs) && $1.isFullyCompleted(memberIDs: trip.memberIDs) }
+            AddTodoView(trip: trip) { _ in
+                // Cache is automatically updated
             }
         }
     }
@@ -82,12 +94,9 @@ struct TodoTabView: View {
             async let todosTask = cloudKitManager.fetchTodos(for: trip.id)
             async let membersTask = cloudKitManager.fetchMembers(memberIDs: trip.memberIDs)
             
-            let (fetchedTodos, fetchedMembers) = try await (todosTask, membersTask)
+            let (_, fetchedMembers) = try await (todosTask, membersTask)
             
             await MainActor.run {
-                todos = fetchedTodos.sorted { 
-                    !$0.isFullyCompleted(memberIDs: trip.memberIDs) && $1.isFullyCompleted(memberIDs: trip.memberIDs)
-                }
                 members = fetchedMembers
                 isLoading = false
             }
@@ -103,14 +112,6 @@ struct TodoTabView: View {
         Task {
             do {
                 try await cloudKitManager.toggleTodoCompletion(todo, userID: cloudKitManager.currentUserID)
-                
-                // Refresh todos
-                let updatedTodos = try await cloudKitManager.fetchTodos(for: trip.id)
-                await MainActor.run {
-                    todos = updatedTodos.sorted {
-                        !$0.isFullyCompleted(memberIDs: trip.memberIDs) && $1.isFullyCompleted(memberIDs: trip.memberIDs)
-                    }
-                }
             } catch {
                 print("Error toggling todo: \(error)")
             }
@@ -164,7 +165,6 @@ struct TodoItemView: View {
                         .foregroundColor(.orange)
                 }
                 
-                // Show who has completed
                 let completedMembers = members.filter { todo.completedBy[$0.userRecordID] == true }
                 if !completedMembers.isEmpty {
                     HStack(spacing: 4) {

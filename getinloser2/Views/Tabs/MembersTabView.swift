@@ -9,7 +9,6 @@ struct MembersTabView: View {
     @State private var members: [TripMember] = []
     @State private var isLoading = true
     @State private var showingShareSheet = false
-    @State private var shareURL: URL?
     
     var body: some View {
         ZStack {
@@ -22,6 +21,9 @@ struct MembersTabView: View {
             } else {
                 ScrollView {
                     VStack(spacing: 24) {
+                        // Invite Code Card
+                        InviteCodeCard(trip: trip, showingShareSheet: $showingShareSheet)
+                        
                         // Notification Settings
                         VStack(spacing: 16) {
                             HStack {
@@ -57,18 +59,18 @@ struct MembersTabView: View {
                                 
                                 Spacer()
                                 
-                                Text("\(members.count)")
+                                Text("\(trip.memberIDs.count)")
                                     .font(.headline)
                                     .foregroundColor(.blue)
                             }
                             
-                            ForEach(members) { member in
-                                MemberCardView(member: member, trip: trip)
+                            ForEach(trip.memberIDs, id: \.self) { memberID in
+                                MemberRowView(memberID: memberID, trip: trip, members: members)
                             }
                         }
                         
                         // Invite Button
-                        Button(action: shareTrip) {
+                        Button(action: { showingShareSheet = true }) {
                             Label("Invite Members", systemImage: "person.badge.plus")
                                 .font(.headline)
                                 .foregroundColor(.white)
@@ -86,9 +88,7 @@ struct MembersTabView: View {
             await loadMembers()
         }
         .sheet(isPresented: $showingShareSheet) {
-            if let url = shareURL {
-                ActivityViewController(activityItems: [url])
-            }
+            ShareTripSheet(trip: trip)
         }
     }
     
@@ -106,47 +106,107 @@ struct MembersTabView: View {
             }
         }
     }
+}
+
+struct InviteCodeCard: View {
+    let trip: Trip
+    @Binding var showingShareSheet: Bool
+    @State private var codeCopied = false
     
-    private func shareTrip() {
-        Task {
-            do {
-                let url = try await cloudKitManager.generateShareLink(for: trip)
-                await MainActor.run {
-                    shareURL = url
-                    showingShareSheet = true
+    var body: some View {
+        VStack(spacing: 16) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Invite Code")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    
+                    Text("Share this code with friends to join")
+                        .font(.caption)
+                        .foregroundColor(.gray)
                 }
-            } catch {
-                print("Error generating share link: \(error)")
+                
+                Spacer()
+                
+                Button(action: { showingShareSheet = true }) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.title2)
+                        .foregroundColor(.blue)
+                }
             }
+            
+            HStack(spacing: 8) {
+                Text(trip.inviteCode)
+                    .font(.system(size: 32, weight: .bold, design: .monospaced))
+                    .foregroundColor(.blue)
+                    .tracking(4)
+                
+                Button(action: copyCode) {
+                    Image(systemName: codeCopied ? "checkmark.circle.fill" : "doc.on.doc")
+                        .font(.title2)
+                        .foregroundColor(codeCopied ? .green : .gray)
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.blue.opacity(0.1))
+            .cornerRadius(12)
+        }
+        .padding()
+        .background(Color.white.opacity(0.05))
+        .cornerRadius(12)
+    }
+    
+    private func copyCode() {
+        UIPasteboard.general.string = trip.inviteCode
+        codeCopied = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            codeCopied = false
         }
     }
 }
 
-struct MemberCardView: View {
+struct MemberRowView: View {
     @EnvironmentObject var cloudKitManager: CloudKitManager
     
-    let member: TripMember
+    let memberID: String
     let trip: Trip
+    let members: [TripMember]
     
     @State private var showingRemoveAlert = false
     
+    private var member: TripMember? {
+        members.first { $0.userRecordID == memberID }
+    }
+    
     private var isCurrentUser: Bool {
-        member.userRecordID == cloudKitManager.currentUserID
+        memberID == cloudKitManager.currentUserID
     }
     
     private var isOwner: Bool {
-        member.userRecordID == trip.ownerID
+        memberID == trip.ownerID
+    }
+    
+    private var displayName: String {
+        if let member = member {
+            return member.name
+        } else if isCurrentUser {
+            return "You"
+        } else if isOwner {
+            return "Trip Owner"
+        } else {
+            return "Member"
+        }
     }
     
     var body: some View {
         HStack(spacing: 12) {
-            // Avatar
             ZStack {
                 Circle()
                     .fill(Color.blue.opacity(0.2))
                     .frame(width: 50, height: 50)
                 
-                Text(member.name.prefix(1).uppercased())
+                Text(displayName.prefix(1).uppercased())
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(.blue)
@@ -154,7 +214,7 @@ struct MemberCardView: View {
             
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
-                    Text(member.name)
+                    Text(displayName)
                         .font(.headline)
                         .foregroundColor(.white)
                     
@@ -168,7 +228,7 @@ struct MemberCardView: View {
                             .cornerRadius(4)
                     }
                     
-                    if isCurrentUser {
+                    if isCurrentUser && !isOwner {
                         Text("You")
                             .font(.caption2)
                             .foregroundColor(.gray)
@@ -178,19 +238,11 @@ struct MemberCardView: View {
                             .cornerRadius(4)
                     }
                 }
-                
-                if !member.phoneNumber.isEmpty {
-                    Link(destination: URL(string: "tel:\(member.phoneNumber)")!) {
-                        Label(member.phoneNumber, systemImage: "phone.fill")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                }
             }
             
             Spacer()
             
-            if !isOwner && cloudKitManager.currentUserID == trip.ownerID {
+            if !isOwner && cloudKitManager.currentUserID == trip.ownerID && !isCurrentUser {
                 Button(action: { showingRemoveAlert = true }) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.red)
@@ -206,14 +258,14 @@ struct MemberCardView: View {
                 removeMember()
             }
         } message: {
-            Text("Are you sure you want to remove \(member.name) from this trip?")
+            Text("Are you sure you want to remove this member from the trip?")
         }
     }
     
     private func removeMember() {
         Task {
             do {
-                try await cloudKitManager.removeMember(member.userRecordID, from: trip)
+                try await cloudKitManager.removeMember(memberID, from: trip)
             } catch {
                 print("Error removing member: \(error)")
             }
@@ -221,15 +273,121 @@ struct MemberCardView: View {
     }
 }
 
-struct ActivityViewController: UIViewControllerRepresentable {
-    let activityItems: [Any]
+struct ShareTripSheet: View {
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var cloudKitManager: CloudKitManager
     
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        return controller
+    let trip: Trip
+    
+    @State private var codeCopied = false
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.black
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 32) {
+                    VStack(spacing: 8) {
+                        Image(systemName: "person.2.badge.plus")
+                            .font(.system(size: 60))
+                            .foregroundColor(.blue)
+                        
+                        Text("Invite Friends")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Text("Share this code with friends who have the app")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                    }
+                    
+                    VStack(spacing: 16) {
+                        Text("INVITE CODE")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.gray)
+                        
+                        Text(trip.inviteCode)
+                            .font(.system(size: 48, weight: .bold, design: .monospaced))
+                            .foregroundColor(.blue)
+                            .tracking(8)
+                        
+                        Button(action: copyCode) {
+                            Label(codeCopied ? "Copied!" : "Copy Code", systemImage: codeCopied ? "checkmark.circle.fill" : "doc.on.doc")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(codeCopied ? Color.green : Color.blue.opacity(0.3))
+                                .cornerRadius(12)
+                        }
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.05))
+                    .cornerRadius(16)
+                    
+                    Button(action: shareMessage) {
+                        Label("Share via Message", systemImage: "square.and.arrow.up")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(12)
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 8) {
+                        Text("How it works")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        Text("1. Share the invite code with your friends\n2. They open the app and tap 'Join Trip'\n3. They enter the code and they're in!")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.05))
+                    .cornerRadius(12)
+                }
+                .padding()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                    .foregroundColor(.blue)
+                }
+            }
+            .preferredColorScheme(.dark)
+        }
     }
     
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+    private func copyCode() {
+        UIPasteboard.general.string = trip.inviteCode
+        codeCopied = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            codeCopied = false
+        }
+    }
+    
+    private func shareMessage() {
+        let message = cloudKitManager.getShareMessage(for: trip)
+        let activityVC = UIActivityViewController(activityItems: [message], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first,
+           let rootVC = window.rootViewController {
+            rootVC.present(activityVC, animated: true)
+        }
+    }
 }
 
 #Preview {

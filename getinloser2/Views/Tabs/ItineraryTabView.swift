@@ -1,13 +1,18 @@
 import SwiftUI
+import Combine
 
 struct ItineraryTabView: View {
     @EnvironmentObject var cloudKitManager: CloudKitManager
     
     let trip: Trip
     
-    @State private var events: [ItineraryEvent] = []
-    @State private var selectedDate: Date?
     @State private var isLoading = true
+    @State private var showingFirstDayTimeline = false
+    
+    // Computed property that uses the cache for live updates
+    private var events: [ItineraryEvent] {
+        cloudKitManager.eventsCache[trip.id] ?? []
+    }
     
     var body: some View {
         ZStack {
@@ -33,6 +38,14 @@ struct ItineraryTabView: View {
         .task {
             await loadEvents()
         }
+        .refreshable {
+            await loadEvents()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            Task {
+                await loadEvents()
+            }
+        }
     }
     
     private var tripDays: [Date] {
@@ -56,27 +69,55 @@ struct ItineraryTabView: View {
     }
     
     private var emptyStateView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "calendar.badge.plus")
-                .font(.system(size: 60))
-                .foregroundColor(.gray)
+        VStack {
+            Spacer()
             
-            Text("No Events Yet")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
+            Button(action: {
+                // Show the first day's timeline to add events
+                if tripDays.first != nil {
+                    showingFirstDayTimeline = true
+                }
+            }) {
+                VStack(spacing: 20) {
+                    Image(systemName: "calendar.badge.plus")
+                        .font(.system(size: 70))
+                        .foregroundColor(.blue)
+                    
+                    Text("Add to Itinerary")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    Text("Start planning your trip")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 280, height: 280)
+                .background(
+                    RoundedRectangle(cornerRadius: 24)
+                        .fill(Color.white.opacity(0.05))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(Color.blue.opacity(0.3), lineWidth: 2)
+                        )
+                )
+                .shadow(color: Color.blue.opacity(0.2), radius: 20, x: 0, y: 10)
+            }
+            .buttonStyle(ScaleButtonStyle())
             
-            Text("Tap on a day to add your first event")
-                .font(.subheadline)
-                .foregroundColor(.gray)
+            Spacer()
+        }
+        .sheet(isPresented: $showingFirstDayTimeline) {
+            if let firstDay = tripDays.first {
+                DayTimelineView(trip: trip, date: firstDay, events: eventsForDay(firstDay))
+            }
         }
     }
     
     private func loadEvents() async {
         do {
-            let fetchedEvents = try await cloudKitManager.fetchEvents(for: trip.id)
+            _ = try await cloudKitManager.fetchEvents(for: trip.id)
             await MainActor.run {
-                events = fetchedEvents
                 isLoading = false
             }
         } catch {
@@ -89,6 +130,8 @@ struct ItineraryTabView: View {
 }
 
 struct DayCardView: View {
+    @EnvironmentObject var cloudKitManager: CloudKitManager
+    
     let date: Date
     let trip: Trip
     let events: [ItineraryEvent]
@@ -170,6 +213,16 @@ struct DayCardView: View {
         .sheet(isPresented: $showingTimeline) {
             DayTimelineView(trip: trip, date: date, events: events)
         }
+    }
+}
+
+// MARK: - Scale Button Style
+
+struct ScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.2), value: configuration.isPressed)
     }
 }
 

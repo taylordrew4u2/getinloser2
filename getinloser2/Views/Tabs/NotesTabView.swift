@@ -9,7 +9,13 @@ struct NotesTabView: View {
     @State private var noteText = ""
     @State private var isLoading = true
     @State private var isSaving = false
+    @State private var saveTask: Task<Void, Never>?
     @FocusState private var isTextEditorFocused: Bool
+    
+    // Use cached note for live updates
+    private var cachedNote: TripNote? {
+        cloudKitManager.notesCache[trip.id]
+    }
     
     var body: some View {
         ZStack {
@@ -28,12 +34,12 @@ struct NotesTabView: View {
                         .scrollContentBackground(.hidden)
                         .background(Color.clear)
                         .onChange(of: noteText) { _, _ in
-                            saveNote()
+                            scheduleNoteSave()
                         }
                     
-                    if let note = note {
+                    if let displayNote = note ?? cachedNote {
                         HStack {
-                            Text("Last edited: \(note.lastModifiedDate.formatted(date: .abbreviated, time: .shortened))")
+                            Text("Last edited: \(displayNote.lastModifiedDate.formatted(date: .abbreviated, time: .shortened))")
                                 .font(.caption)
                                 .foregroundColor(.gray)
                             
@@ -49,6 +55,13 @@ struct NotesTabView: View {
                                         .font(.caption)
                                         .foregroundColor(.blue)
                                 }
+                            } else {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.green)
+                                Text("Saved")
+                                    .font(.caption)
+                                    .foregroundColor(.green)
                             }
                         }
                         .padding()
@@ -59,6 +72,20 @@ struct NotesTabView: View {
         }
         .task {
             await loadNote()
+        }
+        .refreshable {
+            await loadNote()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            Task {
+                await refreshNoteFromCloud()
+            }
+        }
+        .onChange(of: cachedNote?.content) { _, newContent in
+            // Update local text if changed by another user (and we're not currently editing)
+            if let newContent = newContent, !isTextEditorFocused, newContent != noteText {
+                noteText = newContent
+            }
         }
     }
     
@@ -93,33 +120,58 @@ struct NotesTabView: View {
         }
     }
     
-    private func saveNote() {
-        guard var currentNote = note else { return }
+    private func refreshNoteFromCloud() async {
+        do {
+            if let existingNote = try await cloudKitManager.fetchNote(for: trip.id) {
+                await MainActor.run {
+                    // Only update if we're not currently focused (editing)
+                    if !isTextEditorFocused {
+                        note = existingNote
+                        noteText = existingNote.content
+                    }
+                }
+            }
+        } catch {
+            print("Error refreshing note: \(error)")
+        }
+    }
+    
+    private func scheduleNoteSave() {
+        // Cancel any existing save task
+        saveTask?.cancel()
         
-        // Debounce save operation
-        Task {
-            try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+        // Schedule a new save after a delay (debounce)
+        saveTask = Task {
+            try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 second delay
+            
+            guard !Task.isCancelled else { return }
+            
+            await saveNote()
+        }
+    }
+    
+    private func saveNote() async {
+        guard var currentNote = note ?? cachedNote else { return }
+        
+        await MainActor.run {
+            isSaving = true
+        }
+        
+        currentNote.content = noteText
+        currentNote.lastModifiedBy = cloudKitManager.currentUserID
+        currentNote.lastModifiedDate = Date()
+        
+        do {
+            let savedNote = try await cloudKitManager.saveNote(currentNote)
             
             await MainActor.run {
-                isSaving = true
+                note = savedNote
+                isSaving = false
             }
-            
-            currentNote.content = noteText
-            currentNote.lastModifiedBy = cloudKitManager.currentUserID
-            currentNote.lastModifiedDate = Date()
-            
-            do {
-                let savedNote = try await cloudKitManager.saveNote(currentNote)
-                
-                await MainActor.run {
-                    note = savedNote
-                    isSaving = false
-                }
-            } catch {
-                print("Error saving note: \(error)")
-                await MainActor.run {
-                    isSaving = false
-                }
+        } catch {
+            print("Error saving note: \(error)")
+            await MainActor.run {
+                isSaving = false
             }
         }
     }

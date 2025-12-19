@@ -7,12 +7,20 @@ struct TicketsTabView: View {
     
     let trip: Trip
     
-    @State private var tickets: [TicketDocument] = []
     @State private var isLoading = true
     @State private var showingImagePicker = false
     @State private var showingDocumentPicker = false
     @State private var selectedImage: PhotosPickerItem?
     @State private var selectedTicket: TicketDocument?
+    @State private var isUploading = false
+    @State private var uploadError: String?
+    @State private var showingErrorAlert = false
+    @State private var showingPhotoPicker = false
+    
+    // Use cached data for live updates
+    private var tickets: [TicketDocument] {
+        cloudKitManager.ticketsCache[trip.id] ?? []
+    }
     
     var body: some View {
         ZStack {
@@ -43,11 +51,15 @@ struct TicketsTabView: View {
         }
         .overlay(alignment: .bottomTrailing) {
             Menu {
-                PhotosPicker(selection: $selectedImage, matching: .images) {
+                Button(action: { 
+                    showingPhotoPicker = true
+                }) {
                     Label("Upload Photo", systemImage: "photo")
                 }
                 
-                Button(action: { showingDocumentPicker = true }) {
+                Button(action: { 
+                    showingDocumentPicker = true 
+                }) {
                     Label("Upload PDF", systemImage: "doc.fill")
                 }
             } label: {
@@ -59,11 +71,21 @@ struct TicketsTabView: View {
             }
             .padding()
         }
+        .photosPicker(isPresented: $showingPhotoPicker, selection: $selectedImage, matching: .images)
         .task {
             await loadTickets()
         }
-        .onChange(of: selectedImage) { _, newValue in
-            if newValue != nil {
+        .refreshable {
+            await loadTickets()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            Task {
+                await loadTickets()
+            }
+        }
+        .onChange(of: selectedImage) { oldValue, newValue in
+            // Only upload when a new image is selected (not when clearing)
+            if oldValue == nil && newValue != nil {
                 uploadImage()
             }
         }
@@ -73,7 +95,35 @@ struct TicketsTabView: View {
             }
         }
         .sheet(item: $selectedTicket) { ticket in
-            TicketDetailView(ticket: ticket)
+            TicketDetailView(ticket: ticket, tripID: trip.id)
+        }
+        .alert("Upload Error", isPresented: $showingErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            if let uploadError = uploadError {
+                Text(uploadError)
+            }
+        }
+        .overlay {
+            if isUploading {
+                ZStack {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                    
+                    VStack(spacing: 16) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                            .scaleEffect(1.5)
+                        
+                        Text("Uploading ticket...")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
+                    .padding(32)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(16)
+                }
+            }
         }
     }
     
@@ -98,9 +148,8 @@ struct TicketsTabView: View {
     
     private func loadTickets() async {
         do {
-            let fetchedTickets = try await cloudKitManager.fetchTickets(for: trip.id)
+            _ = try await cloudKitManager.fetchTickets(for: trip.id)
             await MainActor.run {
-                tickets = fetchedTickets
                 isLoading = false
             }
         } catch {
@@ -115,8 +164,16 @@ struct TicketsTabView: View {
         Task {
             guard let selectedImage = selectedImage else { return }
             
+            await MainActor.run {
+                isUploading = true
+            }
+            
             do {
+                print("📸 Starting photo upload...")
+                
                 if let data = try await selectedImage.loadTransferable(type: Data.self) {
+                    print("✅ Loaded image data: \(data.count) bytes")
+                    
                     let ticket = TicketDocument(
                         tripID: trip.id,
                         fileName: "ticket_\(Date().timeIntervalSince1970).jpg",
@@ -124,22 +181,48 @@ struct TicketsTabView: View {
                         uploadedBy: cloudKitManager.currentUserID
                     )
                     
+                    print("📤 Uploading to CloudKit...")
                     let savedTicket = try await cloudKitManager.uploadTicket(ticket, fileData: data)
+                    print("✅ Upload successful! Record: \(savedTicket.recordName ?? "unknown")")
                     
                     await MainActor.run {
-                        tickets.append(savedTicket)
                         self.selectedImage = nil
+                        isUploading = false
                     }
+                } else {
+                    throw NSError(domain: "TicketUpload", code: 1, 
+                                userInfo: [NSLocalizedDescriptionKey: "Failed to load image data"])
                 }
             } catch {
-                print("Error uploading image: \(error)")
+                print("❌ Error uploading image: \(error)")
+                await MainActor.run {
+                    uploadError = "Failed to upload photo: \(error.localizedDescription)"
+                    showingErrorAlert = true
+                    isUploading = false
+                    self.selectedImage = nil
+                }
             }
         }
     }
     
     private func uploadDocument(url: URL) {
         Task {
+            await MainActor.run {
+                isUploading = true
+            }
+            
             do {
+                // Start accessing the security-scoped resource
+                guard url.startAccessingSecurityScopedResource() else {
+                    throw NSError(domain: "TicketUpload", code: 2,
+                                userInfo: [NSLocalizedDescriptionKey: "Couldn't access the selected file"])
+                }
+                
+                // Ensure we stop accessing when done
+                defer {
+                    url.stopAccessingSecurityScopedResource()
+                }
+                
                 let data = try Data(contentsOf: url)
                 
                 let ticket = TicketDocument(
@@ -149,13 +232,18 @@ struct TicketsTabView: View {
                     uploadedBy: cloudKitManager.currentUserID
                 )
                 
-                let savedTicket = try await cloudKitManager.uploadTicket(ticket, fileData: data)
+                _ = try await cloudKitManager.uploadTicket(ticket, fileData: data)
                 
                 await MainActor.run {
-                    tickets.append(savedTicket)
+                    isUploading = false
                 }
             } catch {
                 print("Error uploading document: \(error)")
+                await MainActor.run {
+                    uploadError = "Failed to upload PDF: \(error.localizedDescription)"
+                    showingErrorAlert = true
+                    isUploading = false
+                }
             }
         }
     }
@@ -226,6 +314,7 @@ struct TicketDetailView: View {
     @EnvironmentObject var cloudKitManager: CloudKitManager
     
     let ticket: TicketDocument
+    let tripID: String
     
     @State private var showingDeleteAlert = false
     

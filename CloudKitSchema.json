@@ -11,7 +11,7 @@
           "sortable": true
         },
         {
-          "name": "destination",
+          "name": "location",
           "type": "STRING",
           "queryable": true,
           "sortable": true
@@ -29,14 +29,8 @@
           "sortable": true
         },
         {
-          "name": "latitude",
-          "type": "DOUBLE",
-          "queryable": false,
-          "sortable": false
-        },
-        {
-          "name": "longitude",
-          "type": "DOUBLE",
+          "name": "coordinate",
+          "type": "LOCATION",
           "queryable": false,
           "sortable": false
         },
@@ -49,15 +43,14 @@
         {
           "name": "memberIDs",
           "type": "STRING_LIST",
-          "queryable": false,
+          "queryable": true,
           "sortable": false
         },
         {
-          "name": "shareRecord",
-          "type": "REFERENCE",
-          "queryable": false,
-          "sortable": false,
-          "referencedRecordType": "Trip"
+          "name": "inviteCode",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": false
         }
       ]
     },
@@ -79,32 +72,26 @@
           "sortable": true
         },
         {
-          "name": "eventDate",
+          "name": "date",
           "type": "DATE_TIME",
           "queryable": true,
           "sortable": true
         },
         {
-          "name": "startTime",
+          "name": "time",
           "type": "DATE_TIME",
           "queryable": true,
           "sortable": true
         },
         {
-          "name": "locationName",
+          "name": "location",
           "type": "STRING",
           "queryable": false,
           "sortable": false
         },
         {
-          "name": "latitude",
-          "type": "DOUBLE",
-          "queryable": false,
-          "sortable": false
-        },
-        {
-          "name": "longitude",
-          "type": "DOUBLE",
+          "name": "coordinate",
+          "type": "LOCATION",
           "queryable": false,
           "sortable": false
         },
@@ -112,6 +99,12 @@
           "name": "notes",
           "type": "STRING",
           "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "createdBy",
+          "type": "STRING",
+          "queryable": true,
           "sortable": false
         }
       ]
@@ -135,7 +128,7 @@
         },
         {
           "name": "completedBy",
-          "type": "STRING_LIST",
+          "type": "BYTES",
           "queryable": false,
           "sortable": false
         },
@@ -144,12 +137,6 @@
           "type": "STRING",
           "queryable": true,
           "sortable": false
-        },
-        {
-          "name": "createdDate",
-          "type": "DATE_TIME",
-          "queryable": true,
-          "sortable": true
         }
       ]
     },
@@ -177,7 +164,7 @@
           "sortable": false
         },
         {
-          "name": "imageAsset",
+          "name": "fileAsset",
           "type": "ASSET",
           "queryable": false,
           "sortable": false
@@ -214,13 +201,13 @@
           "sortable": false
         },
         {
-          "name": "lastEditedBy",
+          "name": "lastModifiedBy",
           "type": "STRING",
           "queryable": false,
           "sortable": false
         },
         {
-          "name": "lastEditDate",
+          "name": "lastModifiedDate",
           "type": "DATE_TIME",
           "queryable": true,
           "sortable": true
@@ -277,16 +264,24 @@
       "fields": ["startDate"]
     },
     {
-      "recordType": "ItineraryEvent",
-      "fields": ["tripID", "eventDate"]
+      "recordType": "Trip",
+      "fields": ["memberIDs"]
+    },
+    {
+      "recordType": "Trip",
+      "fields": ["inviteCode"]
     },
     {
       "recordType": "ItineraryEvent",
-      "fields": ["eventDate"]
+      "fields": ["tripID", "date"]
+    },
+    {
+      "recordType": "ItineraryEvent",
+      "fields": ["date"]
     },
     {
       "recordType": "TodoItem",
-      "fields": ["tripID", "createdDate"]
+      "fields": ["tripID"]
     },
     {
       "recordType": "TicketDocument",

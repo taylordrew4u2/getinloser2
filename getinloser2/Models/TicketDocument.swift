@@ -31,11 +31,20 @@ struct TicketDocument: Identifiable, Codable, Hashable {
     }
     
     init?(record: CKRecord) {
-        guard let tripID = record["tripID"] as? String,
-              let fileName = record["fileName"] as? String,
+        guard let fileName = record["fileName"] as? String,
               let fileType = record["fileType"] as? String,
               let uploadedBy = record["uploadedBy"] as? String,
               let uploadDate = record["uploadDate"] as? Date else {
+            return nil
+        }
+        
+        // Handle tripID as either a Reference or String
+        let tripID: String
+        if let reference = record["tripID"] as? CKRecord.Reference {
+            tripID = reference.recordID.recordName
+        } else if let stringID = record["tripID"] as? String {
+            tripID = stringID
+        } else {
             return nil
         }
         
@@ -56,16 +65,29 @@ struct TicketDocument: Identifiable, Codable, Hashable {
         let recordID = recordName.map { CKRecord.ID(recordName: $0) } ?? CKRecord.ID(recordName: id)
         let record = CKRecord(recordType: "TicketDocument", recordID: recordID)
         
-        record["tripID"] = tripID
+        // Create a reference to the Trip record
+        let tripRecordID = CKRecord.ID(recordName: tripID)
+        let tripReference = CKRecord.Reference(recordID: tripRecordID, action: .deleteSelf)
+        record["tripID"] = tripReference
+        
         record["fileName"] = fileName
         record["fileType"] = fileType
         record["uploadedBy"] = uploadedBy
         record["uploadDate"] = uploadDate
         
         // Create temporary file for CKAsset
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-        try? fileData.write(to: tempURL)
-        record["fileAsset"] = CKAsset(fileURL: tempURL)
+        // Use a unique filename to avoid conflicts
+        let uniqueFileName = "\(UUID().uuidString)_\(fileName)"
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(uniqueFileName)
+        
+        do {
+            try fileData.write(to: tempURL)
+            print("✅ Wrote ticket data to temporary file: \(tempURL.path)")
+            print("   File size: \(fileData.count) bytes")
+            record["fileAsset"] = CKAsset(fileURL: tempURL)
+        } catch {
+            print("❌ Failed to write temporary file: \(error)")
+        }
         
         return record
     }

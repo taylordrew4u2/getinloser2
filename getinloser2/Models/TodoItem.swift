@@ -24,9 +24,18 @@ struct TodoItem: Identifiable, Codable, Hashable {
     }
     
     init?(record: CKRecord) {
-        guard let tripID = record["tripID"] as? String,
-              let title = record["title"] as? String,
+        guard let title = record["title"] as? String,
               let createdBy = record["createdBy"] as? String else {
+            return nil
+        }
+        
+        // Handle tripID as either a Reference or String
+        let tripID: String
+        if let reference = record["tripID"] as? CKRecord.Reference {
+            tripID = reference.recordID.recordName
+        } else if let stringID = record["tripID"] as? String {
+            tripID = stringID
+        } else {
             return nil
         }
         
@@ -48,7 +57,11 @@ struct TodoItem: Identifiable, Codable, Hashable {
         let recordID = recordName.map { CKRecord.ID(recordName: $0) } ?? CKRecord.ID(recordName: id)
         let record = CKRecord(recordType: "TodoItem", recordID: recordID)
         
-        record["tripID"] = tripID
+        // Create a reference to the Trip record
+        let tripRecordID = CKRecord.ID(recordName: tripID)
+        let tripReference = CKRecord.Reference(recordID: tripRecordID, action: .deleteSelf)
+        record["tripID"] = tripReference
+        
         record["title"] = title
         record["createdBy"] = createdBy
         

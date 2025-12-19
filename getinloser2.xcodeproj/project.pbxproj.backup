@@ -31,16 +31,16 @@
 		BA1A1B542EF12B1000309E36 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */; };
 		BA1A1B552EF12B1000309E36 /* ItineraryEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B292EF12B1000309E36 /* ItineraryEvent.swift */; };
 		BA1A1B562EF12B1000309E36 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B242EF12B1000309E36 /* EventDetailView.swift */; };
-		BA1A1B5C2EF12B1000309E36 /* JoinTripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B3D2EF12B1000309E36 /* JoinTripView.swift */; };
-		BA5072AB2EFCE18100BFEF6E /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA5072AA2EFCE18100BFEF6E /* Media.xcassets */; };
-		BA55283A2EFCD94A003C21A8 /* IOUEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5528382EFCD8E1003C21A8 /* IOUEntry.swift */; };
-		BA55283B2EFCD94A003C21A8 /* IOUTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5528392EFCD94A003C21A8 /* IOUTabView.swift */; };
+		BA1A1B572EF12B1000309E36 /* Contents 2.json in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B212EF12B1000309E36 /* Contents 2.json */; };
+		BA1A1B5A2EF12B1000309E36 /* SETUP 2.md in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B342EF12B1000309E36 /* SETUP 2.md */; };
+		BA1A1B5B2EF12B1000309E36 /* README 2.md in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B322EF12B1000309E36 /* README 2.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
 		BA1A1B1E2EF12B1000309E36 /* AddTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTripView.swift; sourceTree = "<group>"; };
 		BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		BA1A1B212EF12B1000309E36 /* Contents 2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Contents 2.json"; sourceTree = "<group>"; };
 		BA1A1B232EF12B1000309E36 /* DayTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTimelineView.swift; sourceTree = "<group>"; };
 		BA1A1B242EF12B1000309E36 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		BA1A1B252EF12B1000309E36 /* getinloser2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = getinloser2.entitlements; sourceTree = "<group>"; };
@@ -55,6 +55,8 @@
 		BA1A1B2F2EF12B1000309E36 /* MembersTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersTabView.swift; sourceTree = "<group>"; };
 		BA1A1B302EF12B1000309E36 /* NotesTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTabView.swift; sourceTree = "<group>"; };
 		BA1A1B312EF12B1000309E36 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		BA1A1B322EF12B1000309E36 /* README 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "README 2.md"; sourceTree = "<group>"; };
+		BA1A1B342EF12B1000309E36 /* SETUP 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "SETUP 2.md"; sourceTree = "<group>"; };
 		BA1A1B352EF12B1000309E36 /* TicketDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketDocument.swift; sourceTree = "<group>"; };
 		BA1A1B362EF12B1000309E36 /* TicketsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsTabView.swift; sourceTree = "<group>"; };
 		BA1A1B372EF12B1000309E36 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
@@ -63,10 +65,6 @@
 		BA1A1B3A2EF12B1000309E36 /* TripDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailView.swift; sourceTree = "<group>"; };
 		BA1A1B3B2EF12B1000309E36 /* TripMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripMember.swift; sourceTree = "<group>"; };
 		BA1A1B3C2EF12B1000309E36 /* TripNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripNote.swift; sourceTree = "<group>"; };
-		BA1A1B3D2EF12B1000309E36 /* JoinTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinTripView.swift; sourceTree = "<group>"; };
-		BA5072AA2EFCE18100BFEF6E /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		BA5528382EFCD8E1003C21A8 /* IOUEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOUEntry.swift; sourceTree = "<group>"; };
-		BA5528392EFCD94A003C21A8 /* IOUTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IOUTabView.swift; sourceTree = "<group>"; };
 		BA8827442EF8B4A60092B00A /* getinloser2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = getinloser2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -84,85 +82,36 @@
 		BACA93DF2EF1243200FF1B6E = {
 			isa = PBXGroup;
 			children = (
-				BA5072AA2EFCE18100BFEF6E /* Media.xcassets */,
-				BA1A1B252EF12B1000309E36 /* getinloser2.entitlements */,
-				BACA93EA2EF1243200FF1B6E /* getinloser2 */,
-				BACA93E92EF1243200FF1B6E /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		BACA93E92EF1243200FF1B6E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BA8827442EF8B4A60092B00A /* getinloser2.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		BACA93EA2EF1243200FF1B6E /* getinloser2 */ = {
-			isa = PBXGroup;
-			children = (
-				BA1A1B272EF12B1000309E36 /* getinloser2App.swift */,
-				BACA93EB2EF1243200FF1B6E /* Managers */,
-				BACA93EC2EF1243200FF1B6E /* Models */,
-				BACA93ED2EF1243200FF1B6E /* Views */,
-			);
-			path = getinloser2;
-			sourceTree = "<group>";
-		};
-		BACA93EB2EF1243200FF1B6E /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */,
-				BA1A1B2C2EF12B1000309E36 /* LocationManager.swift */,
-				BA1A1B312EF12B1000309E36 /* NotificationManager.swift */,
-			);
-			path = Managers;
-			sourceTree = "<group>";
-		};
-		BACA93EC2EF1243200FF1B6E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				BA5528382EFCD8E1003C21A8 /* IOUEntry.swift */,
-				BA1A1B292EF12B1000309E36 /* ItineraryEvent.swift */,
-				BA1A1B352EF12B1000309E36 /* TicketDocument.swift */,
-				BA1A1B372EF12B1000309E36 /* TodoItem.swift */,
-				BA1A1B392EF12B1000309E36 /* Trip.swift */,
-				BA1A1B3B2EF12B1000309E36 /* TripMember.swift */,
-				BA1A1B3C2EF12B1000309E36 /* TripNote.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		BACA93ED2EF1243200FF1B6E /* Views */ = {
-			isa = PBXGroup;
-			children = (
 				BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */,
 				BA1A1B1E2EF12B1000309E36 /* AddTripView.swift */,
+				BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */,
+				BA1A1B212EF12B1000309E36 /* Contents 2.json */,
 				BA1A1B232EF12B1000309E36 /* DayTimelineView.swift */,
 				BA1A1B242EF12B1000309E36 /* EventDetailView.swift */,
+				BA1A1B252EF12B1000309E36 /* getinloser2.entitlements */,
+				BA1A1B272EF12B1000309E36 /* getinloser2App.swift */,
 				BA1A1B282EF12B1000309E36 /* HomeView.swift */,
-				BA1A1B3D2EF12B1000309E36 /* JoinTripView.swift */,
-				BA1A1B2B2EF12B1000309E36 /* LaunchScreenView.swift */,
-				BA1A1B2D2EF12B1000309E36 /* MapConfirmationView.swift */,
-				BA1A1B3A2EF12B1000309E36 /* TripDetailView.swift */,
-				BACA93EE2EF1243200FF1B6E /* Tabs */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		BACA93EE2EF1243200FF1B6E /* Tabs */ = {
-			isa = PBXGroup;
-			children = (
-				BA5528392EFCD94A003C21A8 /* IOUTabView.swift */,
+				BA1A1B292EF12B1000309E36 /* ItineraryEvent.swift */,
 				BA1A1B2A2EF12B1000309E36 /* ItineraryTabView.swift */,
+				BA1A1B2B2EF12B1000309E36 /* LaunchScreenView.swift */,
+				BA1A1B2C2EF12B1000309E36 /* LocationManager.swift */,
+				BA1A1B2D2EF12B1000309E36 /* MapConfirmationView.swift */,
 				BA1A1B2E2EF12B1000309E36 /* MapsTabView.swift */,
 				BA1A1B2F2EF12B1000309E36 /* MembersTabView.swift */,
 				BA1A1B302EF12B1000309E36 /* NotesTabView.swift */,
+				BA1A1B312EF12B1000309E36 /* NotificationManager.swift */,
+				BA1A1B322EF12B1000309E36 /* README 2.md */,
+				BA1A1B342EF12B1000309E36 /* SETUP 2.md */,
+				BA1A1B352EF12B1000309E36 /* TicketDocument.swift */,
 				BA1A1B362EF12B1000309E36 /* TicketsTabView.swift */,
+				BA1A1B372EF12B1000309E36 /* TodoItem.swift */,
 				BA1A1B382EF12B1000309E36 /* TodoTabView.swift */,
+				BA1A1B392EF12B1000309E36 /* Trip.swift */,
+				BA1A1B3A2EF12B1000309E36 /* TripDetailView.swift */,
+				BA1A1B3B2EF12B1000309E36 /* TripMember.swift */,
+				BA1A1B3C2EF12B1000309E36 /* TripNote.swift */,
+				BA8827442EF8B4A60092B00A /* getinloser2.app */,
 			);
-			path = Tabs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,7 +162,7 @@
 			mainGroup = BACA93DF2EF1243200FF1B6E;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = BACA93E92EF1243200FF1B6E /* Products */;
+			productRefGroup = BACA93DF2EF1243200FF1B6E;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -227,7 +176,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA5072AB2EFCE18100BFEF6E /* Media.xcassets in Resources */,
+				BA1A1B572EF12B1000309E36 /* Contents 2.json in Resources */,
+				BA1A1B5A2EF12B1000309E36 /* SETUP 2.md in Resources */,
+				BA1A1B5B2EF12B1000309E36 /* README 2.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,8 +189,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA55283A2EFCD94A003C21A8 /* IOUEntry.swift in Sources */,
-				BA55283B2EFCD94A003C21A8 /* IOUTabView.swift in Sources */,
 				BA1A1B3F2EF12B1000309E36 /* HomeView.swift in Sources */,
 				BA1A1B402EF12B1000309E36 /* LaunchScreenView.swift in Sources */,
 				BA1A1B412EF12B1000309E36 /* TicketsTabView.swift in Sources */,
@@ -264,7 +213,6 @@
 				BA1A1B542EF12B1000309E36 /* AddEventView.swift in Sources */,
 				BA1A1B552EF12B1000309E36 /* ItineraryEvent.swift in Sources */,
 				BA1A1B562EF12B1000309E36 /* EventDetailView.swift in Sources */,
-				BA1A1B5C2EF12B1000309E36 /* JoinTripView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,8 +232,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = getinloser2/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Get In Loser";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -321,8 +267,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = getinloser2/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Get In Loser";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

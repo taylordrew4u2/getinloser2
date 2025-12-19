@@ -7,6 +7,7 @@ struct TripDetailView: View {
     let trip: Trip
     
     @State private var selectedTab = 0
+    @State private var showingShareSheet = false
     
     var body: some View {
         NavigationStack {
@@ -37,8 +38,11 @@ struct TripDetailView: View {
                         TodoTabView(trip: trip)
                             .tag(4)
                         
-                        MembersTabView(trip: trip)
+                        IOUTabView(trip: trip)
                             .tag(5)
+                        
+                        MembersTabView(trip: trip)
+                            .tag(6)
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))
                 }
@@ -55,8 +59,12 @@ struct TripDetailView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
+                        Button(action: { showingShareSheet = true }) {
+                            Label("Invite Members", systemImage: "person.badge.plus")
+                        }
+                        
                         Button(action: shareTrip) {
-                            Label("Share Trip", systemImage: "square.and.arrow.up")
+                            Label("Share Trip Info", systemImage: "square.and.arrow.up")
                         }
                         
                         Button(role: .destructive, action: deleteTrip) {
@@ -68,25 +76,21 @@ struct TripDetailView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingShareSheet) {
+                ShareTripSheet(trip: trip)
+            }
             .preferredColorScheme(.dark)
         }
     }
     
     private func shareTrip() {
-        Task {
-            do {
-                let url = try await cloudKitManager.generateShareLink(for: trip)
-                await MainActor.run {
-                    let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let window = windowScene.windows.first,
-                       let rootVC = window.rootViewController {
-                        rootVC.present(activityVC, animated: true)
-                    }
-                }
-            } catch {
-                print("Error sharing trip: \(error)")
-            }
+        let message = cloudKitManager.getShareMessage(for: trip)
+        let activityVC = UIActivityViewController(activityItems: [message], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first,
+           let rootVC = window.rootViewController {
+            rootVC.present(activityVC, animated: true)
         }
     }
     
@@ -107,7 +111,7 @@ struct TripDetailView: View {
 struct TabBarView: View {
     @Binding var selectedTab: Int
     
-    let tabs = ["Itinerary", "Maps", "Tickets", "Notes", "To-Do", "Members"]
+    let tabs = ["Itinerary", "Maps", "Tickets", "Notes", "To-Do", "IOU", "Members"]
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -155,4 +159,5 @@ struct TabButton: View {
         ownerID: "user123"
     ))
     .environmentObject(CloudKitManager.shared)
+    .environmentObject(NotificationManager.shared)
 }

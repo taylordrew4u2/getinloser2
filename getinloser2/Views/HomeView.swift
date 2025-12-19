@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var cloudKitManager: CloudKitManager
     @State private var showingAddTrip = false
+    @State private var showingJoinTrip = false
     @State private var selectedTrip: Trip?
     
     var body: some View {
@@ -11,7 +12,13 @@ struct HomeView: View {
                 Color.black
                     .ignoresSafeArea()
                 
-                if cloudKitManager.trips.isEmpty {
+                if cloudKitManager.isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .scaleEffect(1.5)
+                } else if !cloudKitManager.isSignedIn {
+                    iCloudSignInView
+                } else if cloudKitManager.trips.isEmpty {
                     emptyStateView
                 } else {
                     ScrollView {
@@ -30,21 +37,88 @@ struct HomeView: View {
             .navigationTitle("My Trips")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { showingJoinTrip = true }) {
+                        Image(systemName: "person.badge.plus")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }
+                    .disabled(!cloudKitManager.isSignedIn)
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingAddTrip = true }) {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
                             .foregroundColor(.blue)
                     }
+                    .disabled(!cloudKitManager.isSignedIn)
                 }
             }
             .sheet(isPresented: $showingAddTrip) {
                 AddTripView()
             }
+            .sheet(isPresented: $showingJoinTrip) {
+                JoinTripView()
+            }
             .sheet(item: $selectedTrip) { trip in
                 TripDetailView(trip: trip)
             }
             .preferredColorScheme(.dark)
+        }
+    }
+    
+    private var iCloudSignInView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "icloud.slash")
+                .font(.system(size: 80))
+                .foregroundColor(.gray)
+            
+            Text("iCloud Sign In Required")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+            
+            Text("Please sign in to iCloud in Settings to use this app. Your trips are stored securely in iCloud.")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+            
+            if let error = cloudKitManager.error {
+                Text(error)
+                    .font(.caption)
+                    .foregroundColor(.orange)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            }
+            
+            Button(action: openSettings) {
+                Label("Open Settings", systemImage: "gear")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(12)
+            }
+            .padding(.top)
+            
+            Button(action: {
+                Task {
+                    await cloudKitManager.checkAccountStatus()
+                }
+            }) {
+                Text("Refresh Status")
+                    .font(.subheadline)
+                    .foregroundColor(.blue)
+            }
+            .padding(.top, 8)
+        }
+    }
+    
+    private func openSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
         }
     }
     
@@ -63,13 +137,24 @@ struct HomeView: View {
                 .font(.subheadline)
                 .foregroundColor(.gray)
             
-            Button(action: { showingAddTrip = true }) {
-                Label("Add Trip", systemImage: "plus")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
+            HStack(spacing: 16) {
+                Button(action: { showingAddTrip = true }) {
+                    Label("Create Trip", systemImage: "plus")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                }
+                
+                Button(action: { showingJoinTrip = true }) {
+                    Label("Join Trip", systemImage: "person.badge.plus")
+                        .font(.headline)
+                        .foregroundColor(.blue)
+                        .padding()
+                        .background(Color.blue.opacity(0.2))
+                        .cornerRadius(12)
+                }
             }
             .padding(.top)
         }
