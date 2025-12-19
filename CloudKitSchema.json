@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "recordTypes": [
+    {
+      "name": "Trip",
+      "fields": [
+        {
+          "name": "name",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "destination",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "startDate",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "endDate",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "latitude",
+          "type": "DOUBLE",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "longitude",
+          "type": "DOUBLE",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "ownerID",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": false
+        },
+        {
+          "name": "memberIDs",
+          "type": "STRING_LIST",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "shareRecord",
+          "type": "REFERENCE",
+          "queryable": false,
+          "sortable": false,
+          "referencedRecordType": "Trip"
+        }
+      ]
+    },
+    {
+      "name": "ItineraryEvent",
+      "fields": [
+        {
+          "name": "tripID",
+          "type": "REFERENCE",
+          "queryable": true,
+          "sortable": false,
+          "referencedRecordType": "Trip",
+          "deleteAction": "DELETE_SELF"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "eventDate",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "startTime",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "locationName",
+          "type": "STRING",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "latitude",
+          "type": "DOUBLE",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "longitude",
+          "type": "DOUBLE",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "notes",
+          "type": "STRING",
+          "queryable": false,
+          "sortable": false
+        }
+      ]
+    },
+    {
+      "name": "TodoItem",
+      "fields": [
+        {
+          "name": "tripID",
+          "type": "REFERENCE",
+          "queryable": true,
+          "sortable": false,
+          "referencedRecordType": "Trip",
+          "deleteAction": "DELETE_SELF"
+        },
+        {
+          "name": "title",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "completedBy",
+          "type": "STRING_LIST",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "createdBy",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": false
+        },
+        {
+          "name": "createdDate",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        }
+      ]
+    },
+    {
+      "name": "TicketDocument",
+      "fields": [
+        {
+          "name": "tripID",
+          "type": "REFERENCE",
+          "queryable": true,
+          "sortable": false,
+          "referencedRecordType": "Trip",
+          "deleteAction": "DELETE_SELF"
+        },
+        {
+          "name": "fileName",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "fileType",
+          "type": "STRING",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "imageAsset",
+          "type": "ASSET",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "uploadedBy",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": false
+        },
+        {
+          "name": "uploadDate",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        }
+      ]
+    },
+    {
+      "name": "TripNote",
+      "fields": [
+        {
+          "name": "tripID",
+          "type": "REFERENCE",
+          "queryable": true,
+          "sortable": false,
+          "referencedRecordType": "Trip",
+          "deleteAction": "DELETE_SELF"
+        },
+        {
+          "name": "content",
+          "type": "STRING",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "lastEditedBy",
+          "type": "STRING",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "lastEditDate",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        }
+      ]
+    },
+    {
+      "name": "TripMember",
+      "fields": [
+        {
+          "name": "tripID",
+          "type": "REFERENCE",
+          "queryable": true,
+          "sortable": false,
+          "referencedRecordType": "Trip",
+          "deleteAction": "DELETE_SELF"
+        },
+        {
+          "name": "userID",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": false
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "queryable": true,
+          "sortable": true
+        },
+        {
+          "name": "phoneNumber",
+          "type": "STRING",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "notificationsEnabled",
+          "type": "INT64",
+          "queryable": false,
+          "sortable": false
+        },
+        {
+          "name": "joinedDate",
+          "type": "DATE_TIME",
+          "queryable": true,
+          "sortable": true
+        }
+      ]
+    }
+  ],
+  "indexes": [
+    {
+      "recordType": "Trip",
+      "fields": ["startDate"]
+    },
+    {
+      "recordType": "ItineraryEvent",
+      "fields": ["tripID", "eventDate"]
+    },
+    {
+      "recordType": "ItineraryEvent",
+      "fields": ["eventDate"]
+    },
+    {
+      "recordType": "TodoItem",
+      "fields": ["tripID", "createdDate"]
+    },
+    {
+      "recordType": "TicketDocument",
+      "fields": ["tripID", "uploadDate"]
+    },
+    {
+      "recordType": "TripNote",
+      "fields": ["tripID"]
+    },
+    {
+      "recordType": "TripMember",
+      "fields": ["tripID", "userID"]
+    }
+  ],
+  "securityRoles": [
+    {
+      "name": "World",
+      "publicPermissions": {
+        "Trip": "READ_ONLY",
+        "ItineraryEvent": "READ_ONLY",
+        "TodoItem": "READ_ONLY",
+        "TicketDocument": "READ_ONLY",
+        "TripNote": "READ_ONLY",
+        "TripMember": "READ_ONLY"
+      }
+    },
+    {
+      "name": "Authenticated",
+      "authenticatedPermissions": {
+        "Trip": "READ_WRITE",
+        "ItineraryEvent": "READ_WRITE",
+        "TodoItem": "READ_WRITE",
+        "TicketDocument": "READ_WRITE",
+        "TripNote": "READ_WRITE",
+        "TripMember": "READ_WRITE"
+      }
+    }
+  ]
+}

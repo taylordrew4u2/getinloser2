@@ -6,30 +6,73 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BA1A1B3F2EF12B1000309E36 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B282EF12B1000309E36 /* HomeView.swift */; };
+		BA1A1B402EF12B1000309E36 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B2B2EF12B1000309E36 /* LaunchScreenView.swift */; };
+		BA1A1B412EF12B1000309E36 /* TicketsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B362EF12B1000309E36 /* TicketsTabView.swift */; };
+		BA1A1B422EF12B1000309E36 /* TripDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B3A2EF12B1000309E36 /* TripDetailView.swift */; };
+		BA1A1B432EF12B1000309E36 /* TicketDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B352EF12B1000309E36 /* TicketDocument.swift */; };
+		BA1A1B442EF12B1000309E36 /* getinloser2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B272EF12B1000309E36 /* getinloser2App.swift */; };
+		BA1A1B452EF12B1000309E36 /* ItineraryTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B2A2EF12B1000309E36 /* ItineraryTabView.swift */; };
+		BA1A1B462EF12B1000309E36 /* MapConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B2D2EF12B1000309E36 /* MapConfirmationView.swift */; };
+		BA1A1B472EF12B1000309E36 /* NotesTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B302EF12B1000309E36 /* NotesTabView.swift */; };
+		BA1A1B482EF12B1000309E36 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B312EF12B1000309E36 /* NotificationManager.swift */; };
+		BA1A1B492EF12B1000309E36 /* MembersTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B2F2EF12B1000309E36 /* MembersTabView.swift */; };
+		BA1A1B4A2EF12B1000309E36 /* TodoTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B382EF12B1000309E36 /* TodoTabView.swift */; };
+		BA1A1B4B2EF12B1000309E36 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B392EF12B1000309E36 /* Trip.swift */; };
+		BA1A1B4C2EF12B1000309E36 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */; };
+		BA1A1B4D2EF12B1000309E36 /* TripMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B3B2EF12B1000309E36 /* TripMember.swift */; };
+		BA1A1B4E2EF12B1000309E36 /* TripNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B3C2EF12B1000309E36 /* TripNote.swift */; };
+		BA1A1B4F2EF12B1000309E36 /* MapsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B2E2EF12B1000309E36 /* MapsTabView.swift */; };
+		BA1A1B502EF12B1000309E36 /* AddTripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B1E2EF12B1000309E36 /* AddTripView.swift */; };
+		BA1A1B512EF12B1000309E36 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B372EF12B1000309E36 /* TodoItem.swift */; };
+		BA1A1B522EF12B1000309E36 /* DayTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B232EF12B1000309E36 /* DayTimelineView.swift */; };
+		BA1A1B532EF12B1000309E36 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B2C2EF12B1000309E36 /* LocationManager.swift */; };
+		BA1A1B542EF12B1000309E36 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */; };
+		BA1A1B552EF12B1000309E36 /* ItineraryEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B292EF12B1000309E36 /* ItineraryEvent.swift */; };
+		BA1A1B562EF12B1000309E36 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1A1B242EF12B1000309E36 /* EventDetailView.swift */; };
+		BA1A1B572EF12B1000309E36 /* Contents 2.json in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B212EF12B1000309E36 /* Contents 2.json */; };
+		BA1A1B582EF12B1000309E36 /* Contents 3.json in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B222EF12B1000309E36 /* Contents 3.json */; };
+		BA1A1B592EF12B1000309E36 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B202EF12B1000309E36 /* Contents.json */; };
+		BA1A1B5A2EF12B1000309E36 /* SETUP 2.md in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B342EF12B1000309E36 /* SETUP 2.md */; };
+		BA1A1B5B2EF12B1000309E36 /* README 2.md in Resources */ = {isa = PBXBuildFile; fileRef = BA1A1B322EF12B1000309E36 /* README 2.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
+		BA1A1B1E2EF12B1000309E36 /* AddTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTripView.swift; sourceTree = "<group>"; };
+		BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		BA1A1B202EF12B1000309E36 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
+		BA1A1B212EF12B1000309E36 /* Contents 2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Contents 2.json"; sourceTree = "<group>"; };
+		BA1A1B222EF12B1000309E36 /* Contents 3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "Contents 3.json"; sourceTree = "<group>"; };
+		BA1A1B232EF12B1000309E36 /* DayTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTimelineView.swift; sourceTree = "<group>"; };
+		BA1A1B242EF12B1000309E36 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		BA1A1B252EF12B1000309E36 /* getinloser2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = getinloser2.entitlements; sourceTree = "<group>"; };
+		BA1A1B262EF12B1000309E36 /* getinloser2 2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "getinloser2 2.xcodeproj"; sourceTree = "<group>"; };
+		BA1A1B272EF12B1000309E36 /* getinloser2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getinloser2App.swift; sourceTree = "<group>"; };
+		BA1A1B282EF12B1000309E36 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		BA1A1B292EF12B1000309E36 /* ItineraryEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryEvent.swift; sourceTree = "<group>"; };
+		BA1A1B2A2EF12B1000309E36 /* ItineraryTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryTabView.swift; sourceTree = "<group>"; };
+		BA1A1B2B2EF12B1000309E36 /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
+		BA1A1B2C2EF12B1000309E36 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		BA1A1B2D2EF12B1000309E36 /* MapConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapConfirmationView.swift; sourceTree = "<group>"; };
+		BA1A1B2E2EF12B1000309E36 /* MapsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsTabView.swift; sourceTree = "<group>"; };
+		BA1A1B2F2EF12B1000309E36 /* MembersTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersTabView.swift; sourceTree = "<group>"; };
+		BA1A1B302EF12B1000309E36 /* NotesTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTabView.swift; sourceTree = "<group>"; };
+		BA1A1B312EF12B1000309E36 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		BA1A1B322EF12B1000309E36 /* README 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "README 2.md"; sourceTree = "<group>"; };
+		BA1A1B342EF12B1000309E36 /* SETUP 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "SETUP 2.md"; sourceTree = "<group>"; };
+		BA1A1B352EF12B1000309E36 /* TicketDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketDocument.swift; sourceTree = "<group>"; };
+		BA1A1B362EF12B1000309E36 /* TicketsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketsTabView.swift; sourceTree = "<group>"; };
+		BA1A1B372EF12B1000309E36 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
+		BA1A1B382EF12B1000309E36 /* TodoTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTabView.swift; sourceTree = "<group>"; };
+		BA1A1B392EF12B1000309E36 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		BA1A1B3A2EF12B1000309E36 /* TripDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailView.swift; sourceTree = "<group>"; };
+		BA1A1B3B2EF12B1000309E36 /* TripMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripMember.swift; sourceTree = "<group>"; };
+		BA1A1B3C2EF12B1000309E36 /* TripNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripNote.swift; sourceTree = "<group>"; };
+		BA1A1B602EF12B1900309E36 /* getinloser2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "getinloser2-Bridging-Header.h"; sourceTree = "<group>"; };
 		BACA93E82EF1243200FF1B6E /* getinloser2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = getinloser2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BACA93F82EF1243300FF1B6E /* Exceptions for "getinloser2" folder in "getinloser2" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = BACA93E72EF1243200FF1B6E /* getinloser2 */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		BACA93EA2EF1243200FF1B6E /* getinloser2 */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				BACA93F82EF1243300FF1B6E /* Exceptions for "getinloser2" folder in "getinloser2" target */,
-			);
-			path = getinloser2;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		BACA93E52EF1243200FF1B6E /* Frameworks */ = {
@@ -42,11 +85,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BA16E9262EF541A700226A44 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		BACA93DF2EF1243200FF1B6E = {
 			isa = PBXGroup;
 			children = (
-				BACA93EA2EF1243200FF1B6E /* getinloser2 */,
+				BA1A1B262EF12B1000309E36 /* getinloser2 2.xcodeproj */,
+				BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */,
+				BA1A1B1E2EF12B1000309E36 /* AddTripView.swift */,
+				BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */,
+				BA1A1B202EF12B1000309E36 /* Contents.json */,
+				BA1A1B212EF12B1000309E36 /* Contents 2.json */,
+				BA1A1B222EF12B1000309E36 /* Contents 3.json */,
+				BA1A1B232EF12B1000309E36 /* DayTimelineView.swift */,
+				BA1A1B242EF12B1000309E36 /* EventDetailView.swift */,
+				BA1A1B252EF12B1000309E36 /* getinloser2.entitlements */,
+				BA1A1B272EF12B1000309E36 /* getinloser2App.swift */,
+				BA1A1B282EF12B1000309E36 /* HomeView.swift */,
+				BA1A1B292EF12B1000309E36 /* ItineraryEvent.swift */,
+				BA1A1B2A2EF12B1000309E36 /* ItineraryTabView.swift */,
+				BA1A1B2B2EF12B1000309E36 /* LaunchScreenView.swift */,
+				BA1A1B2C2EF12B1000309E36 /* LocationManager.swift */,
+				BA1A1B2D2EF12B1000309E36 /* MapConfirmationView.swift */,
+				BA1A1B2E2EF12B1000309E36 /* MapsTabView.swift */,
+				BA1A1B2F2EF12B1000309E36 /* MembersTabView.swift */,
+				BA1A1B302EF12B1000309E36 /* NotesTabView.swift */,
+				BA1A1B312EF12B1000309E36 /* NotificationManager.swift */,
+				BA1A1B322EF12B1000309E36 /* README 2.md */,
+				BA1A1B342EF12B1000309E36 /* SETUP 2.md */,
+				BA1A1B352EF12B1000309E36 /* TicketDocument.swift */,
+				BA1A1B362EF12B1000309E36 /* TicketsTabView.swift */,
+				BA1A1B372EF12B1000309E36 /* TodoItem.swift */,
+				BA1A1B382EF12B1000309E36 /* TodoTabView.swift */,
+				BA1A1B392EF12B1000309E36 /* Trip.swift */,
+				BA1A1B3A2EF12B1000309E36 /* TripDetailView.swift */,
+				BA1A1B3B2EF12B1000309E36 /* TripMember.swift */,
+				BA1A1B3C2EF12B1000309E36 /* TripNote.swift */,
 				BACA93E92EF1243200FF1B6E /* Products */,
+				BA1A1B602EF12B1900309E36 /* getinloser2-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,9 +154,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				BACA93EA2EF1243200FF1B6E /* getinloser2 */,
-			);
 			name = getinloser2;
 			packageProductDependencies = (
 			);
@@ -95,6 +173,7 @@
 				TargetAttributes = {
 					BACA93E72EF1243200FF1B6E = {
 						CreatedOnToolsVersion = 26.2;
+						LastSwiftMigration = 2620;
 					};
 				};
 			};
@@ -110,6 +189,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BACA93E92EF1243200FF1B6E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BA16E9262EF541A700226A44 /* Products */;
+					ProjectRef = BA1A1B262EF12B1000309E36 /* getinloser2 2.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				BACA93E72EF1243200FF1B6E /* getinloser2 */,
@@ -122,6 +207,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA1A1B572EF12B1000309E36 /* Contents 2.json in Resources */,
+				BA1A1B582EF12B1000309E36 /* Contents 3.json in Resources */,
+				BA1A1B592EF12B1000309E36 /* Contents.json in Resources */,
+				BA1A1B5A2EF12B1000309E36 /* SETUP 2.md in Resources */,
+				BA1A1B5B2EF12B1000309E36 /* README 2.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +222,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA1A1B3F2EF12B1000309E36 /* HomeView.swift in Sources */,
+				BA1A1B402EF12B1000309E36 /* LaunchScreenView.swift in Sources */,
+				BA1A1B412EF12B1000309E36 /* TicketsTabView.swift in Sources */,
+				BA1A1B422EF12B1000309E36 /* TripDetailView.swift in Sources */,
+				BA1A1B432EF12B1000309E36 /* TicketDocument.swift in Sources */,
+				BA1A1B442EF12B1000309E36 /* getinloser2App.swift in Sources */,
+				BA1A1B452EF12B1000309E36 /* ItineraryTabView.swift in Sources */,
+				BA1A1B462EF12B1000309E36 /* MapConfirmationView.swift in Sources */,
+				BA1A1B472EF12B1000309E36 /* NotesTabView.swift in Sources */,
+				BA1A1B482EF12B1000309E36 /* NotificationManager.swift in Sources */,
+				BA1A1B492EF12B1000309E36 /* MembersTabView.swift in Sources */,
+				BA1A1B4A2EF12B1000309E36 /* TodoTabView.swift in Sources */,
+				BA1A1B4B2EF12B1000309E36 /* Trip.swift in Sources */,
+				BA1A1B4C2EF12B1000309E36 /* CloudKitManager.swift in Sources */,
+				BA1A1B4D2EF12B1000309E36 /* TripMember.swift in Sources */,
+				BA1A1B4E2EF12B1000309E36 /* TripNote.swift in Sources */,
+				BA1A1B4F2EF12B1000309E36 /* MapsTabView.swift in Sources */,
+				BA1A1B502EF12B1000309E36 /* AddTripView.swift in Sources */,
+				BA1A1B512EF12B1000309E36 /* TodoItem.swift in Sources */,
+				BA1A1B522EF12B1000309E36 /* DayTimelineView.swift in Sources */,
+				BA1A1B532EF12B1000309E36 /* LocationManager.swift in Sources */,
+				BA1A1B542EF12B1000309E36 /* AddEventView.swift in Sources */,
+				BA1A1B552EF12B1000309E36 /* ItineraryEvent.swift in Sources */,
+				BA1A1B562EF12B1000309E36 /* EventDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,43 +257,33 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = getinloser2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R44WG942GS;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = getinloser2/Info.plist;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = TRAVEL.getinloser2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -188,43 +292,32 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = getinloser2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R44WG942GS;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = getinloser2/Info.plist;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = TRAVEL.getinloser2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
