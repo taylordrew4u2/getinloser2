@@ -50,8 +50,9 @@ class CloudKitManager: ObservableObject {
             
             let result = try await sharedDatabase.records(matching: query)
             
-            let fetchedTrips = result.matchResults.compactMap { _, result -> Trip? in
-                try? result.get().flatMap { Trip(record: $0) }
+            let fetchedTrips = result.matchResults.compactMap { (recordID, recordResult) -> Trip? in
+                guard let record = try? recordResult.get() else { return nil }
+                return Trip(record: record)
             }
             
             trips = fetchedTrips
@@ -111,8 +112,9 @@ class CloudKitManager: ObservableObject {
         
         let result = try await sharedDatabase.records(matching: query)
         
-        return result.matchResults.compactMap { _, result in
-            try? result.get().flatMap { ItineraryEvent(record: $0) }
+        return result.matchResults.compactMap { (recordID, recordResult) -> ItineraryEvent? in
+            guard let record = try? recordResult.get() else { return nil }
+            return ItineraryEvent(record: record)
         }
     }
     
@@ -161,8 +163,9 @@ class CloudKitManager: ObservableObject {
         
         let result = try await sharedDatabase.records(matching: query)
         
-        return result.matchResults.compactMap { _, result in
-            try? result.get().flatMap { TodoItem(record: $0) }
+        return result.matchResults.compactMap { (recordID, recordResult) -> TodoItem? in
+            guard let record = try? recordResult.get() else { return nil }
+            return TodoItem(record: record)
         }
     }
     
@@ -209,8 +212,9 @@ class CloudKitManager: ObservableObject {
         
         let result = try await sharedDatabase.records(matching: query)
         
-        let notes = result.matchResults.compactMap { _, result in
-            try? result.get().flatMap { TripNote(record: $0) }
+        let notes = result.matchResults.compactMap { (recordID, recordResult) -> TripNote? in
+            guard let record = try? recordResult.get() else { return nil }
+            return TripNote(record: record)
         }
         
         return notes.first
