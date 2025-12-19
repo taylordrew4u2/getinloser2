@@ -3,6 +3,39 @@ import CloudKit
 import CoreLocation
 
 struct ItineraryEvent: Identifiable, Codable, Hashable {
+    static func == (lhs: ItineraryEvent, rhs: ItineraryEvent) -> Bool {
+        return lhs.id == rhs.id
+            && lhs.tripID == rhs.tripID
+            && lhs.name == rhs.name
+            && lhs.date == rhs.date
+            && lhs.time == rhs.time
+            && lhs.location == rhs.location
+            && lhs.notes == rhs.notes
+            && lhs.createdBy == rhs.createdBy
+            && lhs.recordName == rhs.recordName
+            && lhs.coordinate?.latitude == rhs.coordinate?.latitude
+            && lhs.coordinate?.longitude == rhs.coordinate?.longitude
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(tripID)
+        hasher.combine(name)
+        hasher.combine(date)
+        hasher.combine(time)
+        hasher.combine(location)
+        hasher.combine(notes)
+        hasher.combine(createdBy)
+        hasher.combine(recordName)
+        if let coordinate = coordinate {
+            hasher.combine(coordinate.latitude)
+            hasher.combine(coordinate.longitude)
+        } else {
+            hasher.combine(0.0 as Double)
+            hasher.combine(0.0 as Double)
+        }
+    }
+
     var id: String
     var tripID: String
     var name: String

@@ -39,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BA16E92D2EF553D500226A44 /* getinloser2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = getinloser2.entitlements; path = getinloser2/getinloser2.entitlements; sourceTree = "<group>"; };
 		BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
 		BA1A1B1E2EF12B1000309E36 /* AddTripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTripView.swift; sourceTree = "<group>"; };
 		BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -48,7 +49,6 @@
 		BA1A1B232EF12B1000309E36 /* DayTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTimelineView.swift; sourceTree = "<group>"; };
 		BA1A1B242EF12B1000309E36 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		BA1A1B252EF12B1000309E36 /* getinloser2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = getinloser2.entitlements; sourceTree = "<group>"; };
-		BA1A1B262EF12B1000309E36 /* getinloser2 2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "getinloser2 2.xcodeproj"; sourceTree = "<group>"; };
 		BA1A1B272EF12B1000309E36 /* getinloser2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getinloser2App.swift; sourceTree = "<group>"; };
 		BA1A1B282EF12B1000309E36 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		BA1A1B292EF12B1000309E36 /* ItineraryEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryEvent.swift; sourceTree = "<group>"; };
@@ -85,17 +85,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BA16E9262EF541A700226A44 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		BACA93DF2EF1243200FF1B6E = {
 			isa = PBXGroup;
 			children = (
-				BA1A1B262EF12B1000309E36 /* getinloser2 2.xcodeproj */,
 				BA1A1B1D2EF12B1000309E36 /* AddEventView.swift */,
 				BA1A1B1E2EF12B1000309E36 /* AddTripView.swift */,
 				BA1A1B1F2EF12B1000309E36 /* CloudKitManager.swift */,
@@ -134,6 +126,7 @@
 		BACA93E92EF1243200FF1B6E /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				BA16E92D2EF553D500226A44 /* getinloser2.entitlements */,
 				BACA93E82EF1243200FF1B6E /* getinloser2.app */,
 			);
 			name = Products;
@@ -189,12 +182,6 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BACA93E92EF1243200FF1B6E /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = BA16E9262EF541A700226A44 /* Products */;
-					ProjectRef = BA1A1B262EF12B1000309E36 /* getinloser2 2.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				BACA93E72EF1243200FF1B6E /* getinloser2 */,

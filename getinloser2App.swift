@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct getinloser2App: App {
     @StateObject private var cloudKitManager = CloudKitManager.shared
-    @StateObject private var locationManager = LocationManager()
+    @StateObject private var locationManager = LocationManager.shared
     
     var body: some Scene {
         WindowGroup {
@@ -21,3 +21,4 @@ struct getinloser2App: App {
         }
     }
 }
+
