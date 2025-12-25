@@ -2,7 +2,7 @@ import SwiftUI
 
 struct JoinTripView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     @State private var inviteCode = ""
     @State private var isLoading = false
@@ -133,7 +133,7 @@ struct JoinTripView: View {
         
         Task {
             do {
-                let trip = try await cloudKitManager.joinTripByInviteCode(inviteCode)
+                let trip = try await firebaseManager.joinTripByInviteCode(inviteCode)
                 await MainActor.run {
                     isLoading = false
                     joinedTrip = trip
@@ -151,5 +151,5 @@ struct JoinTripView: View {
 
 #Preview {
     JoinTripView()
-        .environmentObject(CloudKitManager.shared)
+        .environmentObject(FirebaseStorageManager.shared)
 }

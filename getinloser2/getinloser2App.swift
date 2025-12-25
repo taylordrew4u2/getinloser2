@@ -6,25 +6,25 @@
 //
 
 import SwiftUI
-import CloudKit
 import UserNotifications
+import FirebaseCore
 
 @main
 struct getinloser2App: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var cloudKitManager = CloudKitManager.shared
+    @StateObject private var firebaseManager = FirebaseStorageManager.shared
     @StateObject private var notificationManager = NotificationManager.shared
     
     var body: some Scene {
         WindowGroup {
             LaunchScreenView()
-                .environmentObject(cloudKitManager)
+                .environmentObject(firebaseManager)
                 .environmentObject(notificationManager)
                 .preferredColorScheme(.dark)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     // Refresh data when app becomes active
                     Task {
-                        await cloudKitManager.refreshAllData()
+                        await firebaseManager.refreshAllData()
                     }
                 }
         }
@@ -68,20 +68,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         print("Failed to register for remote notifications: \(error)")
     }
     
-    // MARK: - Handle Remote Notifications (CloudKit)
+    // MARK: - Handle Remote Notifications (Firebase)
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        // Check if this is a CloudKit notification
-        if let ck = userInfo["ck"] as? [String: Any] {
-            print("Received CloudKit notification: \(ck)")
-            
-            Task { @MainActor in
-                await CloudKitManager.shared.handleRemoteNotification(userInfo: userInfo)
-                completionHandler(.newData)
-            }
-        } else {
-            completionHandler(.noData)
+        print("Received remote notification: \(userInfo)")
+        
+        Task { @MainActor in
+            await FirebaseStorageManager.shared.handleRemoteNotification(userInfo: userInfo)
+            completionHandler(.newData)
         }
     }
     
@@ -94,7 +89,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         
         // Also refresh data
         Task { @MainActor in
-            await CloudKitManager.shared.refreshAllData()
+            await FirebaseStorageManager.shared.refreshAllData()
         }
     }
     
@@ -102,7 +97,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         // Refresh data when notification is tapped
         Task { @MainActor in
-            await CloudKitManager.shared.refreshAllData()
+            await FirebaseStorageManager.shared.refreshAllData()
         }
         completionHandler()
     }

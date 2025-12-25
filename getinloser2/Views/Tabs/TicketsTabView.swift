@@ -3,7 +3,7 @@ import PhotosUI
 import PDFKit
 
 struct TicketsTabView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     
@@ -19,7 +19,7 @@ struct TicketsTabView: View {
     
     // Use cached data for live updates
     private var tickets: [TicketDocument] {
-        cloudKitManager.ticketsCache[trip.id] ?? []
+        firebaseManager.ticketsCache[trip.id] ?? []
     }
     
     var body: some View {
@@ -148,7 +148,7 @@ struct TicketsTabView: View {
     
     private func loadTickets() async {
         do {
-            _ = try await cloudKitManager.fetchTickets(for: trip.id)
+            _ = try await firebaseManager.fetchTickets(for: trip.id)
             await MainActor.run {
                 isLoading = false
             }
@@ -178,11 +178,11 @@ struct TicketsTabView: View {
                         tripID: trip.id,
                         fileName: "ticket_\(Date().timeIntervalSince1970).jpg",
                         fileType: "image",
-                        uploadedBy: cloudKitManager.currentUserID
+                        uploadedBy: firebaseManager.currentUserID
                     )
                     
                     print("📤 Uploading to CloudKit...")
-                    let savedTicket = try await cloudKitManager.uploadTicket(ticket, fileData: data)
+                    let savedTicket = try await firebaseManager.uploadTicket(ticket, fileData: data)
                     print("✅ Upload successful! Record: \(savedTicket.recordName ?? "unknown")")
                     
                     await MainActor.run {
@@ -229,10 +229,10 @@ struct TicketsTabView: View {
                     tripID: trip.id,
                     fileName: url.lastPathComponent,
                     fileType: "pdf",
-                    uploadedBy: cloudKitManager.currentUserID
+                    uploadedBy: firebaseManager.currentUserID
                 )
                 
-                _ = try await cloudKitManager.uploadTicket(ticket, fileData: data)
+                _ = try await firebaseManager.uploadTicket(ticket, fileData: data)
                 
                 await MainActor.run {
                     isUploading = false
@@ -311,7 +311,7 @@ struct DocumentPickerView: UIViewControllerRepresentable {
 
 struct TicketDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let ticket: TicketDocument
     let tripID: String
@@ -379,7 +379,7 @@ struct TicketDetailView: View {
     private func deleteTicket() {
         Task {
             do {
-                try await cloudKitManager.deleteTicket(ticket)
+                try await firebaseManager.deleteTicket(ticket)
                 await MainActor.run {
                     dismiss()
                 }
@@ -398,5 +398,5 @@ struct TicketDetailView: View {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }

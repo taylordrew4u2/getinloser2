@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @State private var showingAddTrip = false
     @State private var showingJoinTrip = false
     @State private var selectedTrip: Trip?
@@ -12,18 +12,18 @@ struct HomeView: View {
                 Color.black
                     .ignoresSafeArea()
                 
-                if cloudKitManager.isLoading {
+                if firebaseManager.isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .scaleEffect(1.5)
-                } else if !cloudKitManager.isSignedIn {
+                } else if !firebaseManager.isSignedIn {
                     iCloudSignInView
-                } else if cloudKitManager.trips.isEmpty {
+                } else if firebaseManager.trips.isEmpty {
                     emptyStateView
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 16) {
-                            ForEach(cloudKitManager.trips) { trip in
+                            ForEach(firebaseManager.trips) { trip in
                                 TripCardView(trip: trip)
                                     .onTapGesture {
                                         selectedTrip = trip
@@ -43,7 +43,7 @@ struct HomeView: View {
                             .font(.title2)
                             .foregroundColor(.blue)
                     }
-                    .disabled(!cloudKitManager.isSignedIn)
+                    .disabled(!firebaseManager.isSignedIn)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -52,7 +52,7 @@ struct HomeView: View {
                             .font(.title2)
                             .foregroundColor(.blue)
                     }
-                    .disabled(!cloudKitManager.isSignedIn)
+                    .disabled(!firebaseManager.isSignedIn)
                 }
             }
             .sheet(isPresented: $showingAddTrip) {
@@ -85,7 +85,7 @@ struct HomeView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
             
-            if let error = cloudKitManager.error {
+            if let error = firebaseManager.error {
                 Text(error)
                     .font(.caption)
                     .foregroundColor(.orange)
@@ -105,7 +105,7 @@ struct HomeView: View {
             
             Button(action: {
                 Task {
-                    await cloudKitManager.checkAccountStatus()
+                    await firebaseManager.checkAccountStatus()
                 }
             }) {
                 Text("Refresh Status")
@@ -224,6 +224,6 @@ struct TripCardView: View {
 
 #Preview {
     HomeView()
-        .environmentObject(CloudKitManager.shared)
+        .environmentObject(FirebaseStorageManager.shared)
         .environmentObject(NotificationManager.shared)
 }

@@ -3,7 +3,7 @@ import MapKit
 
 struct AddEventView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @StateObject private var locationManager = LocationManager.shared
     
     let trip: Trip
@@ -147,10 +147,10 @@ struct AddEventView: View {
                     location: location,
                     coordinate: selectedCoordinate,
                     notes: notes,
-                    createdBy: cloudKitManager.currentUserID
+                    createdBy: firebaseManager.currentUserID
                 )
                 
-                let savedEvent = try await cloudKitManager.createEvent(event)
+                let savedEvent = try await firebaseManager.createEvent(event)
                 
                 await MainActor.run {
                     onEventAdded(savedEvent)
@@ -178,5 +178,5 @@ struct AddEventView: View {
         ),
         date: Date()
     ) { _ in }
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }

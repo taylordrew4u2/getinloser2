@@ -3,7 +3,7 @@ import MapKit
 
 struct EventDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @StateObject private var locationManager = LocationManager.shared
     
     let trip: Trip
@@ -135,7 +135,7 @@ struct EventDetailView: View {
     private func deleteEvent() {
         Task {
             do {
-                try await cloudKitManager.deleteEvent(event)
+                try await firebaseManager.deleteEvent(event)
                 await MainActor.run {
                     dismiss()
                 }

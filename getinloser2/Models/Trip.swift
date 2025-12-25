@@ -1,5 +1,5 @@
 import Foundation
-import CloudKit
+// import CloudKit (removed - using Firebase)
 import CoreLocation
 
 struct Trip: Identifiable, Codable, Hashable {

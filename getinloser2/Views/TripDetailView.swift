@@ -2,7 +2,7 @@ import SwiftUI
 
 struct TripDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     
@@ -84,7 +84,7 @@ struct TripDetailView: View {
     }
     
     private func shareTrip() {
-        let message = cloudKitManager.getShareMessage(for: trip)
+        let message = firebaseManager.getShareMessage(for: trip)
         let activityVC = UIActivityViewController(activityItems: [message], applicationActivities: nil)
         
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -97,7 +97,7 @@ struct TripDetailView: View {
     private func deleteTrip() {
         Task {
             do {
-                try await cloudKitManager.deleteTrip(trip)
+                try await firebaseManager.deleteTrip(trip)
                 await MainActor.run {
                     dismiss()
                 }
@@ -158,6 +158,6 @@ struct TabButton: View {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
     .environmentObject(NotificationManager.shared)
 }

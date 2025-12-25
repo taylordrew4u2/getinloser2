@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DayTimelineView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     let date: Date
@@ -173,5 +173,5 @@ struct EventCardView: View {
         date: Date(),
         events: []
     )
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }

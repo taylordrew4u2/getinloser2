@@ -1,5 +1,5 @@
 import Foundation
-import CloudKit
+// import CloudKit (removed - using Firebase)
 
 struct TripMember: Identifiable, Codable, Hashable {
     var id: String

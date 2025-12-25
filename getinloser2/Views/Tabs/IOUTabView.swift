@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct IOUTabView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     
@@ -12,7 +12,7 @@ struct IOUTabView: View {
     @State private var members: [TripMember] = []
     
     private var iouEntries: [IOUEntry] {
-        cloudKitManager.iouCache[trip.id] ?? []
+        firebaseManager.iouCache[trip.id] ?? []
     }
     
     // Group IOUs by owner (person being owed)
@@ -91,8 +91,8 @@ struct IOUTabView: View {
     
     private func loadData() async {
         do {
-            let fetchedMembers = try await cloudKitManager.fetchMembers(memberIDs: trip.memberIDs)
-            _ = try await cloudKitManager.fetchIOUEntries(for: trip.id)
+            let fetchedMembers = try await firebaseManager.fetchMembers(memberIDs: trip.memberIDs)
+            _ = try await firebaseManager.fetchIOUEntries(for: trip.id)
             await MainActor.run {
                 self.members = fetchedMembers
                 self.isLoading = false
@@ -109,7 +109,7 @@ struct IOUTabView: View {
 // MARK: - Member IOU Box
 
 struct MemberIOUBox: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let member: TripMember
     let trip: Trip
@@ -119,7 +119,7 @@ struct MemberIOUBox: View {
     let onAddDebt: () -> Void
     
     private var isCurrentUser: Bool {
-        member.userRecordID == cloudKitManager.currentUserID
+        member.userRecordID == firebaseManager.currentUserID
     }
     
     var body: some View {
@@ -185,7 +185,7 @@ struct MemberIOUBox: View {
 // MARK: - IOU Entry Row
 
 struct IOUEntryRow: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @State private var showingEditSheet = false
     
     let entry: IOUEntry
@@ -194,7 +194,7 @@ struct IOUEntryRow: View {
     let canModify: Bool
     
     private var debtorName: String {
-        members.first(where: { $0.userRecordID == entry.debtorID })?.name ?? (entry.debtorID == cloudKitManager.currentUserID ? "You" : "Unknown")
+        members.first(where: { $0.userRecordID == entry.debtorID })?.name ?? (entry.debtorID == firebaseManager.currentUserID ? "You" : "Unknown")
     }
     
     var body: some View {
@@ -246,7 +246,7 @@ struct IOUEntryRow: View {
 
 struct AddDebtView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     let ownerMember: TripMember
@@ -363,12 +363,12 @@ struct AddDebtView: View {
                 let entry = IOUEntry(
                     tripID: trip.id,
                     ownerID: ownerMember.userRecordID,
-                    debtorID: cloudKitManager.currentUserID,
+                    debtorID: firebaseManager.currentUserID,
                     amount: amountValue,
                     note: note.isEmpty ? nil : note
                 )
                 
-                _ = try await cloudKitManager.saveIOUEntry(entry)
+                _ = try await firebaseManager.saveIOUEntry(entry)
                 
                 await MainActor.run {
                     dismiss()
@@ -388,7 +388,7 @@ struct AddDebtView: View {
 
 struct EditDebtView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     let entry: IOUEntry
@@ -548,13 +548,13 @@ struct EditDebtView: View {
             do {
                 // If amount is 0, delete the entry instead
                 if amountValue == 0 {
-                    try await cloudKitManager.deleteIOUEntry(entry)
+                    try await firebaseManager.deleteIOUEntry(entry)
                 } else {
                     var updatedEntry = entry
                     updatedEntry.amount = amountValue
                     updatedEntry.note = note.isEmpty ? nil : note
                     
-                    _ = try await cloudKitManager.saveIOUEntry(updatedEntry)
+                    _ = try await firebaseManager.saveIOUEntry(updatedEntry)
                 }
                 
                 await MainActor.run {
@@ -573,7 +573,7 @@ struct EditDebtView: View {
     private func deleteEntry() {
         Task {
             do {
-                try await cloudKitManager.deleteIOUEntry(entry)
+                try await firebaseManager.deleteIOUEntry(entry)
                 await MainActor.run {
                     dismiss()
                 }
@@ -820,6 +820,6 @@ struct CalculatorButtonView: View {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }
 

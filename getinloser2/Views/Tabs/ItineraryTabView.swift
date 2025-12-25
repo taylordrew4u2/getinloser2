@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 
 struct ItineraryTabView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     
@@ -11,7 +11,7 @@ struct ItineraryTabView: View {
     
     // Computed property that uses the cache for live updates
     private var events: [ItineraryEvent] {
-        cloudKitManager.eventsCache[trip.id] ?? []
+        firebaseManager.eventsCache[trip.id] ?? []
     }
     
     var body: some View {
@@ -116,7 +116,7 @@ struct ItineraryTabView: View {
     
     private func loadEvents() async {
         do {
-            _ = try await cloudKitManager.fetchEvents(for: trip.id)
+            _ = try await firebaseManager.fetchEvents(for: trip.id)
             await MainActor.run {
                 isLoading = false
             }
@@ -130,7 +130,7 @@ struct ItineraryTabView: View {
 }
 
 struct DayCardView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let date: Date
     let trip: Trip
@@ -234,5 +234,5 @@ struct ScaleButtonStyle: ButtonStyle {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MembersTabView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @EnvironmentObject var notificationManager: NotificationManager
     
     let trip: Trip
@@ -94,7 +94,7 @@ struct MembersTabView: View {
     
     private func loadMembers() async {
         do {
-            let fetchedMembers = try await cloudKitManager.fetchMembers(memberIDs: trip.memberIDs)
+            let fetchedMembers = try await firebaseManager.fetchMembers(memberIDs: trip.memberIDs)
             await MainActor.run {
                 members = fetchedMembers
                 isLoading = false
@@ -167,7 +167,7 @@ struct InviteCodeCard: View {
 }
 
 struct MemberRowView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let memberID: String
     let trip: Trip
@@ -180,7 +180,7 @@ struct MemberRowView: View {
     }
     
     private var isCurrentUser: Bool {
-        memberID == cloudKitManager.currentUserID
+        memberID == firebaseManager.currentUserID
     }
     
     private var isOwner: Bool {
@@ -242,7 +242,7 @@ struct MemberRowView: View {
             
             Spacer()
             
-            if !isOwner && cloudKitManager.currentUserID == trip.ownerID && !isCurrentUser {
+            if !isOwner && firebaseManager.currentUserID == trip.ownerID && !isCurrentUser {
                 Button(action: { showingRemoveAlert = true }) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.red)
@@ -265,7 +265,7 @@ struct MemberRowView: View {
     private func removeMember() {
         Task {
             do {
-                try await cloudKitManager.removeMember(memberID, from: trip)
+                try await firebaseManager.removeMember(memberID, from: trip)
             } catch {
                 print("Error removing member: \(error)")
             }
@@ -275,7 +275,7 @@ struct MemberRowView: View {
 
 struct ShareTripSheet: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     
@@ -379,7 +379,7 @@ struct ShareTripSheet: View {
     }
     
     private func shareMessage() {
-        let message = cloudKitManager.getShareMessage(for: trip)
+        let message = firebaseManager.getShareMessage(for: trip)
         let activityVC = UIActivityViewController(activityItems: [message], applicationActivities: nil)
         
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -398,6 +398,6 @@ struct ShareTripSheet: View {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
     .environmentObject(NotificationManager.shared)
 }

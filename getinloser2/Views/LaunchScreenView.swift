@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct LaunchScreenView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @EnvironmentObject var notificationManager: NotificationManager
     @State private var isAnimating = false
     @State private var rotationAngle: Double = 0
@@ -9,13 +9,13 @@ struct LaunchScreenView: View {
     
     var body: some View {
         Group {
-            if showHomeView || !cloudKitManager.isLoading {
+            if showHomeView || !firebaseManager.isLoading {
                 HomeView()
             } else {
                 launchContent
             }
         }
-        .onChange(of: cloudKitManager.isLoading) { oldValue, newValue in
+        .onChange(of: firebaseManager.isLoading) { oldValue, newValue in
             if !newValue {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     showHomeView = true
@@ -71,6 +71,6 @@ struct LaunchScreenView: View {
 
 #Preview {
     LaunchScreenView()
-        .environmentObject(CloudKitManager.shared)
+        .environmentObject(FirebaseStorageManager.shared)
         .environmentObject(NotificationManager.shared)
 }

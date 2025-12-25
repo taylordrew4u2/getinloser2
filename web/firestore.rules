@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Trips - allow members to read/write
+    match /trips/{tripId} {
+      allow read: if true;  // For demo - tighten with auth later
+      allow create: if true;
+      allow update, delete: if true;
+      
+      // Subcollections for trips (events, todos, notes, tickets, iou)
+      match /{subcollection}/{document=**} {
+        allow read, write: if true;  // For demo - tighten with auth later
+      }
+    }
+    
+    // Members
+    match /members/{memberId} {
+      allow read, write: if true;  // For demo
+    }
+  }
+}

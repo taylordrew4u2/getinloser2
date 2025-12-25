@@ -2,7 +2,7 @@ import SwiftUI
 import MapKit
 
 struct MapsTabView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @StateObject private var locationManager = LocationManager.shared
     
     let trip: Trip
@@ -100,7 +100,7 @@ struct MapsTabView: View {
     
     private func loadEvents() async {
         do {
-            let fetchedEvents = try await cloudKitManager.fetchEvents(for: trip.id)
+            let fetchedEvents = try await firebaseManager.fetchEvents(for: trip.id)
             await MainActor.run {
                 events = fetchedEvents
                 isLoading = false
@@ -133,5 +133,5 @@ struct MapsTabView: View {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }

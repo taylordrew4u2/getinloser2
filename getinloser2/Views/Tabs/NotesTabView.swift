@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct NotesTabView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     
@@ -14,7 +14,7 @@ struct NotesTabView: View {
     
     // Use cached note for live updates
     private var cachedNote: TripNote? {
-        cloudKitManager.notesCache[trip.id]
+        firebaseManager.notesCache[trip.id]
     }
     
     var body: some View {
@@ -91,7 +91,7 @@ struct NotesTabView: View {
     
     private func loadNote() async {
         do {
-            if let existingNote = try await cloudKitManager.fetchNote(for: trip.id) {
+            if let existingNote = try await firebaseManager.fetchNote(for: trip.id) {
                 await MainActor.run {
                     note = existingNote
                     noteText = existingNote.content
@@ -102,10 +102,10 @@ struct NotesTabView: View {
                 let newNote = TripNote(
                     tripID: trip.id,
                     content: "",
-                    lastModifiedBy: cloudKitManager.currentUserID
+                    lastModifiedBy: firebaseManager.currentUserID
                 )
                 
-                let savedNote = try await cloudKitManager.saveNote(newNote)
+                let savedNote = try await firebaseManager.saveNote(newNote)
                 
                 await MainActor.run {
                     note = savedNote
@@ -122,7 +122,7 @@ struct NotesTabView: View {
     
     private func refreshNoteFromCloud() async {
         do {
-            if let existingNote = try await cloudKitManager.fetchNote(for: trip.id) {
+            if let existingNote = try await firebaseManager.fetchNote(for: trip.id) {
                 await MainActor.run {
                     // Only update if we're not currently focused (editing)
                     if !isTextEditorFocused {
@@ -158,11 +158,11 @@ struct NotesTabView: View {
         }
         
         currentNote.content = noteText
-        currentNote.lastModifiedBy = cloudKitManager.currentUserID
+        currentNote.lastModifiedBy = firebaseManager.currentUserID
         currentNote.lastModifiedDate = Date()
         
         do {
-            let savedNote = try await cloudKitManager.saveNote(currentNote)
+            let savedNote = try await firebaseManager.saveNote(currentNote)
             
             await MainActor.run {
                 note = savedNote
@@ -185,5 +185,5 @@ struct NotesTabView: View {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }

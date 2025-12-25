@@ -3,7 +3,7 @@ import MapKit
 
 struct AddTripView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @StateObject private var locationManager = LocationManager.shared
     
     @State private var tripName = ""
@@ -135,11 +135,11 @@ struct AddTripView: View {
                     coordinate: selectedCoordinate,
                     startDate: startDate,
                     endDate: endDate,
-                    ownerID: cloudKitManager.currentUserID,
-                    memberIDs: [cloudKitManager.currentUserID]
+                    ownerID: firebaseManager.currentUserID,
+                    memberIDs: [firebaseManager.currentUserID]
                 )
                 
-                _ = try await cloudKitManager.createTrip(trip)
+                _ = try await firebaseManager.createTrip(trip)
                 
                 await MainActor.run {
                     isLoading = false
@@ -167,5 +167,5 @@ struct CustomTextFieldStyle: TextFieldStyle {
 
 #Preview {
     AddTripView()
-        .environmentObject(CloudKitManager.shared)
+        .environmentObject(FirebaseStorageManager.shared)
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TodoTabView: View {
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     
@@ -11,7 +11,7 @@ struct TodoTabView: View {
     
     // Use cached data for live updates
     private var todos: [TodoItem] {
-        (cloudKitManager.todosCache[trip.id] ?? []).sorted {
+        (firebaseManager.todosCache[trip.id] ?? []).sorted {
             !$0.isFullyCompleted(memberIDs: trip.memberIDs) && $1.isFullyCompleted(memberIDs: trip.memberIDs)
         }
     }
@@ -91,8 +91,8 @@ struct TodoTabView: View {
     
     private func loadData() async {
         do {
-            async let todosTask = cloudKitManager.fetchTodos(for: trip.id)
-            async let membersTask = cloudKitManager.fetchMembers(memberIDs: trip.memberIDs)
+            async let todosTask = firebaseManager.fetchTodos(for: trip.id)
+            async let membersTask = firebaseManager.fetchMembers(memberIDs: trip.memberIDs)
             
             let (_, fetchedMembers) = try await (todosTask, membersTask)
             
@@ -111,7 +111,7 @@ struct TodoTabView: View {
     private func toggleTodo(_ todo: TodoItem) {
         Task {
             do {
-                try await cloudKitManager.toggleTodoCompletion(todo, userID: cloudKitManager.currentUserID)
+                try await firebaseManager.toggleTodoCompletion(todo, userID: firebaseManager.currentUserID)
             } catch {
                 print("Error toggling todo: \(error)")
             }
@@ -125,11 +125,11 @@ struct TodoItemView: View {
     let members: [TripMember]
     let onToggle: () -> Void
     
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     @State private var showingDeleteAlert = false
     
     private var currentUserCompleted: Bool {
-        todo.completedBy[cloudKitManager.currentUserID] == true
+        todo.completedBy[firebaseManager.currentUserID] == true
     }
     
     private var isFullyCompleted: Bool {
@@ -210,7 +210,7 @@ struct TodoItemView: View {
     private func deleteTodo() {
         Task {
             do {
-                try await cloudKitManager.deleteTodo(todo)
+                try await firebaseManager.deleteTodo(todo)
             } catch {
                 print("Error deleting todo: \(error)")
             }
@@ -220,7 +220,7 @@ struct TodoItemView: View {
 
 struct AddTodoView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cloudKitManager: CloudKitManager
+    @EnvironmentObject var firebaseManager: FirebaseStorageManager
     
     let trip: Trip
     let onTodoAdded: (TodoItem) -> Void
@@ -288,10 +288,10 @@ struct AddTodoView: View {
                     tripID: trip.id,
                     title: todoTitle,
                     completedBy: [:],
-                    createdBy: cloudKitManager.currentUserID
+                    createdBy: firebaseManager.currentUserID
                 )
                 
-                let savedTodo = try await cloudKitManager.createTodo(todo)
+                let savedTodo = try await firebaseManager.createTodo(todo)
                 
                 await MainActor.run {
                     onTodoAdded(savedTodo)
@@ -316,5 +316,5 @@ struct AddTodoView: View {
         endDate: Date().addingTimeInterval(86400 * 7),
         ownerID: "user123"
     ))
-    .environmentObject(CloudKitManager.shared)
+    .environmentObject(FirebaseStorageManager.shared)
 }
